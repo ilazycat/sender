@@ -57,7 +57,7 @@ ROOT_URLCONF = 'school.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['/home/lc4t/Documents/git/web_py/school/grade/template'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
