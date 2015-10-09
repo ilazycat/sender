@@ -3,19 +3,19 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.db.models import Q
 from grade.models import users
+from django.contrib import auth
 import datetime
 
 
 
 def index(request):
-    if request.session.get('is_login',False):
-        #user not login
-        return render_to_response('index.html')
-
-    elif (request.session.get('is_login',True)):
-        loginUser = request.session['login_user']
-        return render_to_response('index.html')
-
+    # if request.session.get('is_login',False):
+    #     return render_to_response('index.html',{'title':'Hello'})
+    # elif (request.session.get('is_login',True)):
+    #     return render_to_response('index.html',{'title':'Hello guy'})
+    # else:
+    #     return render_to_response('index.html',{'title':'Hello'})
+    return render_to_response('index.html',{'title':'hello~~~~'})
 def register(request):
     return render_to_response('register.html')
 
@@ -44,18 +44,15 @@ def search(request):
         "query":query
         })
 
-def login(request):
-    try:
-        m = users.objects.get(username__exact=request.POST['username'])
-        if m.password == request.POST['password']:
-            request.session['member_id'] = m.id
-            return HttpResponse("You're logged in.")
-    except users.DoesNotExist:
-        return HttpResponse("Your username and password didn't match.")
 
-def logout(request):
-    try:
-        del request.session['member_id']
-    except KeyError:
-        pass
-    return HttpResponse("You're logged out.")
+
+from django.contrib.auth import authenticate, login
+
+
+def Login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)

@@ -16,16 +16,18 @@ Including another URLconf
 
 from django.conf.urls import include, url
 from django.contrib import admin
-from grade.views import current_datetime,hours_ahead
-from django.contrib.auth.views import login, logout
+from grade.views import current_datetime, hours_ahead, index, Login
+
 import school.settings
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^search/$','grade.views.search'),
-    url(r'^accounts/login/$',  login),
-    url(r'^accounts/logout/$', logout),
+    url(r'^accounts/login/$',  Login),
+    # url(r'^accounts/logout/$', logout),
     url(r'^time/$',current_datetime),
+    url(r'^index/$',index),
+    # url(r'^accounts/register/$',register),
     url(r'^time/plus/(\d{1,2})/$',hours_ahead),
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':school.settings.STATIC_URL}),
 ]

@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'grade',
+    'school',
 
 
 )
@@ -101,7 +102,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_URLS = (
     os.path.join(BASE_DIR, "static"),
+    '/home/lc4t/Documents/git/web_py/school/school/static/',
 )
