@@ -27,7 +27,7 @@ urlpatterns = [
     # url(r'^accounts/logout/$', logout),
     url(r'^time/$',current_datetime),
     url(r'^index/$',index),
-    # url(r'^accounts/register/$',register),
+    url(r'^login/$',Login),
     url(r'^time/plus/(\d{1,2})/$',hours_ahead),
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':school.settings.STATIC_URL}),
 ]

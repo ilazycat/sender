@@ -1,20 +1,15 @@
 
 from django.shortcuts import render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Q
 from grade.models import users
 from django.contrib import auth
 import datetime
-
-
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render_to_response, get_object_or_404
+from django.template import RequestContext
 
 def index(request):
-    # if request.session.get('is_login',False):
-    #     return render_to_response('index.html',{'title':'Hello'})
-    # elif (request.session.get('is_login',True)):
-    #     return render_to_response('index.html',{'title':'Hello guy'})
-    # else:
-    #     return render_to_response('index.html',{'title':'Hello'})
     return render_to_response('index.html',{'title':'hello~~~~'})
 def register(request):
     return render_to_response('register.html')
@@ -46,13 +41,22 @@ def search(request):
 
 
 
-from django.contrib.auth import authenticate, login
+
 
 
 def Login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
+    # assert False
+    if ('username' in request.POST and 'password' in request.POST):
+        username = request.POST.get('username','')
+        password = request.POST.get('password','')
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/home/?username='+username)
+            else:
+                return render_to_response('login.html',{"errormessage":username+" is not active."}, context_instance=RequestContext(request))
+        else:
+            return render_to_response('login.html',{"errormessage":"username and password are not match."}, context_instance=RequestContext(request))
+    else:
+        return render_to_response('login.html',{"errormessage":"Please login in."}, context_instance=RequestContext(request))
