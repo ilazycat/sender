@@ -12,17 +12,30 @@
       <label for="username">Username</label>
       <input type="username" class="form-control" name="username" placeholder="{{username}}">
     </div>
+
     <div class="form-group">
       <label for="password">Password</label>
       <input type="password" class="form-control" name="password" placeholder="{{password}}">
     </div>
+
     <div class="form-group">
       <label for="email">Email</label>
       <input type="email" class="form-control" name="email" placeholder="{{email}}">
     </div>
-    {{captcha}}
+    
+    <div class="form-group">
+      <label for="{{label_for}}">{{label_content}}</label>
+      <img src="{{img_src}}" alt="{{img_alt}}" class="{{img_class}}" />
+      {% if errorlist_content %}
+      <div class="alert alert-danger" role="alert">{{errorlist_content}}</div>
+      {% endif %}
+      <input id="{{input1_id}}" name="{{input1_name}}" type="{{input1_type}}" value="{{input1_value}}" />
+      <input autocomplete="{{input2_autocomplete}}" id="{{input2_id}}" type="{{input2_type}}" class="form-control" name="{{input2_name}}" placeholder="code">
+    </div>
 
-     <input type="submit" class="btn btn-success" value="Register" />
+
+
+    <input type="submit" class="btn btn-success" value="Register" />
   </form>
 
 

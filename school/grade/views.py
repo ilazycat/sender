@@ -2,9 +2,9 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Q
-from grade.models import users
 from django.contrib import auth
 import datetime
+import re
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -51,10 +51,13 @@ def Index(request):
         return render_to_response('index.html',{'title':'hello '+request.user.username})
     return render_to_response('index.html',{'title':'hello~~~~'})
 def Register(request):
+
     # TODO:  vcode for same ip many times
+    # TODO:  Bootstrap Validator
 
     #filter the input
     ### POST > vcode > input
+
     messageType = 'danger'      # default
     if request.POST:
         form = CaptchaTestForm(request.POST)
@@ -79,8 +82,18 @@ def Register(request):
         form = CaptchaTestForm()
         messageType = 'info'
         message = 'No input'
+    ### this is beauty the captcha input
+    captcha = captchaFormat(form)
+    label_for = captcha['label']['for']
+    label_content = captcha['label']['content']
 
-    return render_to_response('register.html', {'captcha':form,'messageType':messageType,'message':message},context_instance=RequestContext(request))
+    img_src = captcha['img']['src']
+    img_alt = captcha['img']['alt']
+    img_class = captcha['img']['cclass']
+
+    
+
+    return render_to_response('register.html', {'captcha':captcha,'messageType':messageType,'message':message},context_instance=RequestContext(request))
 
 
 
@@ -119,3 +132,30 @@ def Home(request):
 def filterInput(inner):
     ## filter
     return inner
+
+
+def captchaFormat(str_form):
+    print (str(str_form))
+    label = re.findall(r'<label for="([_a-z0-9A-Z]*)">([:a-zA-Z0-9]*)</label>',str(str_form))
+    label = {'for':label[0][0],'content':label[0][1]}
+
+    errorlist = re.findall(r'<ul class="([a-z0-9A-Z]*)"><li>([\s0-9A-Za-z]*)</li>',str(str_form))
+    try:
+        errorlist = {'class':errorlist[0][0],'content':errorlist[0][1]}
+    except:
+        errorlist = None
+
+    pic = re.findall(r'<img src="([/a-z0-9A-Z]*)" alt="([a-zA-Z0-9]*)" class="([a-zA-Z0-9]*)" />',str(str_form))
+    pic = {'src':pic[0][0],'alt':pic[0][1],'class':pic[0][2]}
+
+    input1 = re.findall(r'<input id="([_a-z0-9A-Z]*)" name="([_a-zA-Z0-9]*)" type="([a-zA-Z0-9]*)" value="([a-zA-Z0-9]*)" />',str(str_form))
+    input1 = {'id':input1[0][0],'name':input1[0][1],'type':input1[0][2],'value':input1[0][3]}
+
+    input2 = re.findall(r'<input autocomplete="([a-z0-9A-Z]*)" id="([_a-zA-Z0-9]*)" name="([_a-zA-Z0-9]*)" type="([a-zA-Z0-9]*)" />',str(str_form))
+    input2 = {'autocomplete':input2[0][0],'id':input2[0][1],'name':input2[0][2],'type':input2[0][3]}
+    str_form = {'label':label,'errorlist':errorlist,'pic':pic,'input1':input1,'input2':input2}
+    print (str_form)
+    return str_form
+
+#<tr><th><label for="id_captcha_1">Captcha:</label></th><td><img src="/captcha/image/ad6f475e55ed79efa7ff996ba38fe67b2aa02532/" alt="captcha" class="captcha" /> <input id="id_captcha_0" name="captcha_0" type="hidden" value="ad6f475e55ed79efa7ff996ba38fe67b2aa02532" /> <input autocomplete="off" id="id_captcha_1" name="captcha_1" type="text" /></td></tr>
+#<tr><th><label for="id_captcha_1">Captcha:</label></th><td><ul class="errorlist"><li>Invalid CAPTCHA</li></ul><img src="/captcha/image/ef86da9cb8229bbfb8aacd12bf25c9e0dae4e346/" alt="captcha" class="captcha" /> <input id="id_captcha_0" name="captcha_0" type="hidden" value="ef86da9cb8229bbfb8aacd12bf25c9e0dae4e346" /> <input autocomplete="off" id="id_captcha_1" name="captcha_1" type="text" /></td></tr>
