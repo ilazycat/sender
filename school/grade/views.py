@@ -83,17 +83,20 @@ def Register(request):
         messageType = 'info'
         message = 'No input'
     ### this is beauty the captcha input
-    captcha = captchaFormat(form)
-    label_for = captcha['label']['for']
-    label_content = captcha['label']['content']
 
-    img_src = captcha['img']['src']
-    img_alt = captcha['img']['alt']
-    img_class = captcha['img']['cclass']
-
-    
-
-    return render_to_response('register.html', {'captcha':captcha,'messageType':messageType,'message':message},context_instance=RequestContext(request))
+    # img_src = captcha['pic']['src']
+    # input1_value = captcha['input1']['value']
+    # 'img_src':img_src, 'input1_value':input1_value,
+    '''<div class="form-group">
+      <label for="id_captcha_1">Captcha:</label>
+      <img src="{{img_src}}" alt="captcha" class="captcha" />
+      {% if errorlist_content %}
+      <div class="alert alert-danger" role="alert">{{errorlist_content}}</div>
+      {% endif %}
+      <input id="id_captcha_0" name="captcha_0" type="hidden" value="{{input1_value}}" />
+      <input autocomplete="off" id="id_captcha_1" type="text" class="form-control" name="captcha_1" placeholder="code">
+    </div>'''
+    return render_to_response('register.html', {'captcha':form, 'messageType':messageType,'message':message},context_instance=RequestContext(request))
 
 
 
@@ -135,7 +138,7 @@ def filterInput(inner):
 
 
 def captchaFormat(str_form):
-    print (str(str_form))
+    # print (str(str_form))
     label = re.findall(r'<label for="([_a-z0-9A-Z]*)">([:a-zA-Z0-9]*)</label>',str(str_form))
     label = {'for':label[0][0],'content':label[0][1]}
 
@@ -154,8 +157,8 @@ def captchaFormat(str_form):
     input2 = re.findall(r'<input autocomplete="([a-z0-9A-Z]*)" id="([_a-zA-Z0-9]*)" name="([_a-zA-Z0-9]*)" type="([a-zA-Z0-9]*)" />',str(str_form))
     input2 = {'autocomplete':input2[0][0],'id':input2[0][1],'name':input2[0][2],'type':input2[0][3]}
     str_form = {'label':label,'errorlist':errorlist,'pic':pic,'input1':input1,'input2':input2}
-    print (str_form)
+    # print (str_form)
     return str_form
 
-#<tr><th><label for="id_captcha_1">Captcha:</label></th><td><img src="/captcha/image/ad6f475e55ed79efa7ff996ba38fe67b2aa02532/" alt="captcha" class="captcha" /> <input id="id_captcha_0" name="captcha_0" type="hidden" value="ad6f475e55ed79efa7ff996ba38fe67b2aa02532" /> <input autocomplete="off" id="id_captcha_1" name="captcha_1" type="text" /></td></tr>
-#<tr><th><label for="id_captcha_1">Captcha:</label></th><td><ul class="errorlist"><li>Invalid CAPTCHA</li></ul><img src="/captcha/image/ef86da9cb8229bbfb8aacd12bf25c9e0dae4e346/" alt="captcha" class="captcha" /> <input id="id_captcha_0" name="captcha_0" type="hidden" value="ef86da9cb8229bbfb8aacd12bf25c9e0dae4e346" /> <input autocomplete="off" id="id_captcha_1" name="captcha_1" type="text" /></td></tr>
+
+## TODO: HOME PAGE, USER filter
