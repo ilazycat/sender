@@ -26,7 +26,9 @@ user login page
       <label for="password">Password</label>
       <input type="password" class="form-control" name="password" placeholder="password">
     </div>
-     <input type="submit" class="btn btn-success" value="login" />
+    {{captcha}}
+    <input type="submit" class="btn btn-success" value="login" />
+
   </form>
 
 {% endblock %}

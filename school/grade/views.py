@@ -1,22 +1,46 @@
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
-from django.db.models import Q
 from django.contrib import auth
 import datetime
 import re
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.contrib.auth.models import User
+from grade.models import grades,userinfo
 from django import forms
 from captcha.fields import CaptchaField
 from captcha.models import CaptchaStore
 class CaptchaTestForm(forms.Form):
     captcha = CaptchaField()
 
+def filterUsername(raw_username):
+    # special permit map: _
+    username = re.findall(r'^[a-zA-Z0-9_-]{5,18}$',raw_username)
+    if (username):
+        return username
+    else:
+        return False
 
+def filterPassword(raw_password):
+    # special permit map: !@$&*,.?_
+    password = re.findall(r'^[a-zA-Z0-9!@$&*,.?_-]{6,18}$',raw_password)
+    if (password):
+        return password
+    else:
+        return False
 
+def filterEmail(raw_email):
+    # special permit map: !@$&*,.?_
+    email = re.findall(r'^[a-zA-Z0-9._-]+\@[a-zA-Z0-9_-]+\.[a-zA-Z0-9._-]+$tests.py',raw_email)
+    if (email):
+        return email
+    else:
+        return False
+
+def query(table):
+    return eval(table+'.objects')
 
 
 def current_datetime(request):
@@ -29,27 +53,14 @@ def hours_ahead(request, offset):
     html = "<html><body>In %s hour(s), it will be %s.</body></html>" % (offset, dt)
     return HttpResponse(html)
 
-def search(request):
-    query = request.GET.get('q','')
-    if query:
-        qset = (
-            Q(username__contains=query) |
-            Q(email__contains=query)
-        )
-        results = users.objects.filter(qset).distinct()
-    else:
-        results = []
-    return render_to_response('search.html',{
-        "results":results,
-        "query":query
-        })
 
 
 def Index(request):
 # the index page for all
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         return render_to_response('index.html',{'title':'hello '+request.user.username})
     return render_to_response('index.html',{'title':'hello~~~~'})
+
 def Register(request):
 
     # TODO:  vcode for same ip many times
@@ -66,14 +77,17 @@ def Register(request):
             errormessage = 'code was true, no input'
             if ('username' in request.POST and 'password' in request.POST and 'email' in request.POST):
                 ##### TODO: test inpu
-                username  = filterInput(request.POST['username'])
-                password  = filterInput(request.POST['password'])
-                email     = filterInput(request.POST['email'])
+                username = filterUsername(request.POST.get('username',''))
+                password = filterPassword(request.POST.get('password',''))
+                email    = filterEmail(request.POST['email'])
                 try:
-                    user = User.objects.create_user(username, email, password)
-                    user.save()
-                    messageType = 'success'
-                    message = 'code was true,user can add'
+                    if (username and password and email):
+                        user = User.objects.create_user(username, email, password)
+                        user.save()
+                        messageType = 'success'
+                        message = 'code was true,user can add'
+                    else:
+                        message = 'Please check your input'
                 except:
                     message = 'code was true, user can not add'
         else:
@@ -101,22 +115,30 @@ def Register(request):
 
 
 def Login(request):
-    # assert False
-
-    if ('username' in request.POST and 'password' in request.POST):
-        username = request.POST.get('username','')
-        password = request.POST.get('password','')
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect('/home/')
-            else:
-                return render_to_response('login.html',{"errormessage":username+" is not active."}, context_instance=RequestContext(request))
-        else:
-            return render_to_response('login.html',{"errormessage":"username and password are not match.",'username':username}, context_instance=RequestContext(request))
-    else:
-        return render_to_response('login.html',context_instance=RequestContext(request))
+    errormessage = None
+    if request.user.is_authenticated():# had login
+        return HttpResponseRedirect('/home/')
+    if request.POST:
+        form = CaptchaTestForm(request.POST)
+        if form.is_valid():
+            human = True
+            if ('username' in request.POST and 'password' in request.POST):
+                username = filterUsername(request.POST.get('username',''))
+                password = filterPassword(request.POST.get('password',''))
+                user = authenticate(username=username, password=password)
+                if user is not None:# no this user
+                    if user.is_active:
+                        login(request, user)
+                        return HttpResponseRedirect('/home/') #login success
+                    else:# user not active
+                        errormessage = 'username' + ' is not active.'
+                else:#password wrong
+                    errormessage = 'username and password are not match.'
+            else:#no username,password value
+                errormessage = 'What are you doing?'
+    else:# GET
+        form = CaptchaTestForm()
+    return render_to_response('login.html',{'captcha':form,'errormessage':errormessage},context_instance=RequestContext(request))
 
 
 
@@ -126,8 +148,9 @@ def Logout(request):
 
 
 def Home(request):
-    if request.user.is_authenticated:
-        return render_to_response('home.html',{'title':request.user.username,'user':request.user.username},context_instance=RequestContext(request))
+    # @login_required
+    if request.user.is_authenticated():
+        return render_to_response('home.html',{'title':request.user.username+'\'s home page','user':request.user.username},context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/index/')
 
@@ -161,4 +184,12 @@ def captchaFormat(str_form):
     return str_form
 
 
-## TODO: HOME PAGE, USER filter
+
+def Manage(request):
+    if request.user.is_authenticated():
+        return render_to_response('manage.html',{})
+
+    else:
+        return HttpResponseRedirect('/login/')
+
+## TODO: manage

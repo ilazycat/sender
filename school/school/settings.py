@@ -108,3 +108,5 @@ STATICFILES_URLS = (
     os.path.join(BASE_DIR, "static"),
     '/home/lc4t/Documents/git/web_py/school/school/static/',
 )
+
+LOGIN_URL='/login/'
