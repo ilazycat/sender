@@ -85,7 +85,9 @@ def Register(request):
                         user.save()
                         messageType = 'success'
                         message = 'code was true,user can add'
-                        return HttpResponseRedirect('/login/')
+                        user = authenticate(username=username, password=password)
+                        login(request, user)
+                        return HttpResponseRedirect('/home/')
                     else:
                         # print (username,password,email)
                         message = 'Please check your input'
@@ -185,3 +187,32 @@ def Manage(request):
         return HttpResponseRedirect('/login/')
 
 ## TODO: manage
+
+def Add(request):
+    if not request.user.is_authenticated(): # user is login
+        return HttpResponseRedirect('/login/')
+
+    ####################################WARNING!
+    errormessage = None
+    if request.POST:
+        form = CaptchaTestForm(request.POST)
+        if form.is_valid():
+            human = True
+            if ('username' in request.POST and 'password' in request.POST):
+                username = filterUsername(request.POST.get('username',''))
+                password = filterPassword(request.POST.get('password',''))
+                user = authenticate(username=username, password=password)
+                if user is not None:# no this user
+                    if user.is_active:
+                        login(request, user)
+                        return HttpResponseRedirect('/home/') #login success
+                    else:# user not active
+                        errormessage = 'username' + ' is not active.'
+                else:#password wrong
+                    errormessage = 'username and password are not match.'
+            else:#no username,password value
+                errormessage = 'What are you doing?'
+    else:# GET
+        form = CaptchaTestForm()
+    return render_to_response('login.html',{'captcha':form,'errormessage':errormessage},context_instance=RequestContext(request))
+

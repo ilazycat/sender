@@ -16,7 +16,7 @@ Including another URLconf
 
 from django.conf.urls import include, url
 from django.contrib import admin
-from grade.views import current_datetime, hours_ahead, Index, Login, Logout, Home, Register, Manage
+from grade.views import current_datetime, hours_ahead, Index, Login, Logout, Home, Register, Manage, Add
 import school.settings
 
 urlpatterns = [
@@ -32,5 +32,6 @@ urlpatterns = [
     url(r'^time/plus/(\d{1,2})/$',hours_ahead),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^manage/$', Manage),
+    url(r'^add/$', Add),
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':school.settings.STATIC_URL}),
 ]

@@ -8,9 +8,9 @@ class userinfo(models.Model):
 
     web_username    = models.CharField(max_length = 18) #
     username        = models.CharField(max_length = 18) # belong to web_username
-    name            = models.TextField(max_length = 20)
+    name            = models.TextField(max_length = 20,null=True)
     password        = models.CharField(max_length = 30)
-    email           = models.EmailField()
+    email           = models.EmailField(null=True)
     school          = models.TextField(max_length = 100)
     def __str__(self):
         return "%s, %s, %s, %s, %s" % (self.username, self.password, self.name, self.email, self.school)
