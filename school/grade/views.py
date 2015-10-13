@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from grade.models import grades,userinfo
 from django import forms
+from django.contrib.auth.models import User # 创建用户
 from captcha.fields import CaptchaField
 from captcha.models import CaptchaStore
 class CaptchaTestForm(forms.Form):
@@ -19,7 +20,7 @@ def filterUsername(raw_username):
     # special permit map: _
     username = re.findall(r'^[a-zA-Z0-9_-]{5,18}$',raw_username)
     if (username):
-        return username
+        return username[0]
     else:
         return False
 
@@ -27,15 +28,15 @@ def filterPassword(raw_password):
     # special permit map: !@$&*,.?_
     password = re.findall(r'^[a-zA-Z0-9!@$&*,.?_-]{6,18}$',raw_password)
     if (password):
-        return password
+        return password[0]
     else:
         return False
 
 def filterEmail(raw_email):
     # special permit map: !@$&*,.?_
-    email = re.findall(r'^[a-zA-Z0-9._-]+\@[a-zA-Z0-9_-]+\.[a-zA-Z0-9._-]+$tests.py',raw_email)
+    email = re.findall(r'^[a-zA-Z0-9._-]+\@[a-zA-Z0-9_-]+\.[a-zA-Z0-9._-]+$',raw_email)
     if (email):
-        return email
+        return email[0]
     else:
         return False
 
@@ -68,7 +69,6 @@ def Register(request):
 
     #filter the input
     ### POST > vcode > input
-
     messageType = 'danger'      # default
     if request.POST:
         form = CaptchaTestForm(request.POST)
@@ -76,17 +76,18 @@ def Register(request):
             human = True
             errormessage = 'code was true, no input'
             if ('username' in request.POST and 'password' in request.POST and 'email' in request.POST):
-                ##### TODO: test inpu
                 username = filterUsername(request.POST.get('username',''))
                 password = filterPassword(request.POST.get('password',''))
-                email    = filterEmail(request.POST['email'])
+                email    = filterEmail(request.POST.get('email',''))
                 try:
                     if (username and password and email):
                         user = User.objects.create_user(username, email, password)
                         user.save()
                         messageType = 'success'
                         message = 'code was true,user can add'
+                        return HttpResponseRedirect('/login/')
                     else:
+                        # print (username,password,email)
                         message = 'Please check your input'
                 except:
                     message = 'code was true, user can not add'
@@ -101,15 +102,6 @@ def Register(request):
     # img_src = captcha['pic']['src']
     # input1_value = captcha['input1']['value']
     # 'img_src':img_src, 'input1_value':input1_value,
-    '''<div class="form-group">
-      <label for="id_captcha_1">Captcha:</label>
-      <img src="{{img_src}}" alt="captcha" class="captcha" />
-      {% if errorlist_content %}
-      <div class="alert alert-danger" role="alert">{{errorlist_content}}</div>
-      {% endif %}
-      <input id="id_captcha_0" name="captcha_0" type="hidden" value="{{input1_value}}" />
-      <input autocomplete="off" id="id_captcha_1" type="text" class="form-control" name="captcha_1" placeholder="code">
-    </div>'''
     return render_to_response('register.html', {'captcha':form, 'messageType':messageType,'message':message},context_instance=RequestContext(request))
 
 
@@ -187,7 +179,7 @@ def captchaFormat(str_form):
 
 def Manage(request):
     if request.user.is_authenticated():
-        return render_to_response('manage.html',{})
+        return render_to_response('manage.html',{'user':request.user.username})
 
     else:
         return HttpResponseRedirect('/login/')
