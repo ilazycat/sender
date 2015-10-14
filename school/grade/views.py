@@ -8,11 +8,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from grade.models import grades,userinfo
+from grade.models import grades,userinfo,information
 from django import forms
 from django.contrib.auth.models import User # 创建用户
 from captcha.fields import CaptchaField
 from captcha.models import CaptchaStore
+
+
 class CaptchaTestForm(forms.Form):
     captcha = CaptchaField()
 
@@ -74,7 +76,7 @@ def Register(request):
         form = CaptchaTestForm(request.POST)
         if form.is_valid():
             human = True
-            errormessage = 'code was true, no input'
+            message = 'code was true, no input'
             if ('username' in request.POST and 'password' in request.POST and 'email' in request.POST):
                 username = filterUsername(request.POST.get('username',''))
                 password = filterPassword(request.POST.get('password',''))
@@ -82,7 +84,6 @@ def Register(request):
                 try:
                     if (username and password and email):
                         user = User.objects.create_user(username, email, password)
-                        user.save()
                         messageType = 'success'
                         message = 'code was true,user can add'
                         user = authenticate(username=username, password=password)
@@ -90,7 +91,7 @@ def Register(request):
                         return HttpResponseRedirect('/home/')
                     else:
                         # print (username,password,email)
-                        message = 'Please check your input'
+                        message = 'Please check your input,May not in permission'
                 except:
                     message = 'code was true, user can not add'
         else:
@@ -109,7 +110,7 @@ def Register(request):
 
 
 def Login(request):
-    errormessage = None
+    message = None
     if request.user.is_authenticated():# had login
         return HttpResponseRedirect('/home/')
     if request.POST:
@@ -125,14 +126,14 @@ def Login(request):
                         login(request, user)
                         return HttpResponseRedirect('/home/') #login success
                     else:# user not active
-                        errormessage = 'username' + ' is not active.'
+                        message = 'username' + ' is not active.'
                 else:#password wrong
-                    errormessage = 'username and password are not match.'
+                    message = 'username and password are not match.'
             else:#no username,password value
-                errormessage = 'What are you doing?'
+                message = 'What are you doing?'
     else:# GET
         form = CaptchaTestForm()
-    return render_to_response('login.html',{'captcha':form,'errormessage':errormessage},context_instance=RequestContext(request))
+    return render_to_response('login.html',{'captcha':form,'message':message},context_instance=RequestContext(request))
 
 
 
@@ -144,14 +145,10 @@ def Logout(request):
 def Home(request):
     # @login_required
     if request.user.is_authenticated():
-        return render_to_response('home.html',{'title':request.user.username+'\'s home page','user':request.user.username},context_instance=RequestContext(request))
+        return render_to_response('home.html',{'title':request.user.username+'\'s home page','user':request.user.username, 'active_home':'active'},context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/index/')
 
-
-def filterInput(inner):
-    ## filter
-    return inner
 
 
 def captchaFormat(str_form):
@@ -181,7 +178,8 @@ def captchaFormat(str_form):
 
 def Manage(request):
     if request.user.is_authenticated():
-        return render_to_response('manage.html',{'user':request.user.username})
+        userinfoList = userinfo.objects.filter(belongs_id = request.user.id)
+        return render_to_response('manage.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList})
 
     else:
         return HttpResponseRedirect('/login/')
@@ -191,28 +189,28 @@ def Manage(request):
 def Add(request):
     if not request.user.is_authenticated(): # user is login
         return HttpResponseRedirect('/login/')
-
-    ####################################WARNING!
-    errormessage = None
+    ####EDITING
+    message = None
     if request.POST:
         form = CaptchaTestForm(request.POST)
         if form.is_valid():
             human = True
-            if ('username' in request.POST and 'password' in request.POST):
-                username = filterUsername(request.POST.get('username',''))
-                password = filterPassword(request.POST.get('password',''))
-                user = authenticate(username=username, password=password)
-                if user is not None:# no this user
-                    if user.is_active:
-                        login(request, user)
-                        return HttpResponseRedirect('/home/') #login success
-                    else:# user not active
-                        errormessage = 'username' + ' is not active.'
-                else:#password wrong
-                    errormessage = 'username and password are not match.'
+            if ('username' in request.POST and 'password' in request.POST  and 'school' in request.POST):
+                belongs_id = request.user.id
+                username   = request.POST.get('username','')
+                password   = request.POST.get('password','')
+                email      = request.POST.get('email','')
+                school     = request.POST.get('school','')
+                if(not userinfo.objects.filter(belongs_id = belongs_id, username = username, school = school)):### verify repeat
+                    try:#userinfo add
+                        adder = userinfo.objects.create(belongs_id = belongs_id , username = username, password= password, email = email, school = school, verify = False)
+                        return HttpResponseRedirect('/manage/')
+                    except:# error?
+                        message = 'This user cannot add.'
+                else:#had added
+                    message = 'You had added this account.'
             else:#no username,password value
-                errormessage = 'What are you doing?'
+                message = 'What are you doing?'
     else:# GET
         form = CaptchaTestForm()
-    return render_to_response('login.html',{'captcha':form,'errormessage':errormessage},context_instance=RequestContext(request))
-
+    return render_to_response('add.html',{'captcha':form,'message':message, 'active_add':'active'},context_instance=RequestContext(request))

@@ -5,8 +5,8 @@ user login page
 {% block content %}
 
 
-    {% if errormessage %}
-    <div class="alert alert-danger" role="alert">{{errormessage}}</div>
+    {% if message %}
+    <div class="alert alert-danger" role="alert">{{message}}</div>
     {% else %}
     <div class="alert alert-info" role="alert">Please Login in</div>
     {% endif %}
