@@ -18,7 +18,6 @@ Second: update the userinfo(if wrong)
 Third: delete the userinfo
 Fourth = view grades
 
-
 <table class="table table-hover table-bordered">
 
 <tr>
@@ -27,11 +26,12 @@ Fourth = view grades
   <td class="info">username</td>
   <td class="info">email</td>
   <td class="info">status</td>
+  <td class="info">check</td>
 </tr>
 
 {% for one in userinfoList %}
 <tr>
-  {% if one.status %}
+  {% if one.verify %}
     <td class="success">{{forloop.counter}}</td>
     <td class="success">{{one.school}}</td>
     <td class="success"><a href="/user/{{one.id}}">{{one.username}}</a></td>
@@ -40,11 +40,8 @@ Fourth = view grades
       {% else %}
       <td class="success">None</td>
     {% endif %}
-    {% if one.status %}
-      <td class="success">{{one.status}}</td>
-      {% else %}
-      <td class="success">False</td>
-    {% endif %}
+    <td class="success">{{one.verify}}</td>
+    <td class="success"><a href='/delete/'>delete</a></td>
   {% else %}
     <td class="danger">{{forloop.counter}}</td>
     <td class="danger">{{one.school}}</td>
@@ -54,11 +51,8 @@ Fourth = view grades
       {% else %}
       <td class="danger">None</td>
     {% endif %}
-    {% if one.status %}
-      <td class="danger">{{one.status}}</td>
-      {% else %}
-      <td class="danger">False</td>
-    {% endif %}
+    <td class="danger">{{one.verify}}</td>
+    <td class="success"><a href='/change/'>change</a></td>
   {% endif %}
 
 </tr>

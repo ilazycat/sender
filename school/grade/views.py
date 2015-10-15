@@ -13,7 +13,7 @@ from django import forms
 from django.contrib.auth.models import User # 创建用户
 from captcha.fields import CaptchaField
 from captcha.models import CaptchaStore
-
+from uestc import UESTC
 
 class CaptchaTestForm(forms.Form):
     captcha = CaptchaField()
@@ -151,33 +151,13 @@ def Home(request):
 
 
 
-def captchaFormat(str_form):
-    # print (str(str_form))
-    label = re.findall(r'<label for="([_a-z0-9A-Z]*)">([:a-zA-Z0-9]*)</label>',str(str_form))
-    label = {'for':label[0][0],'content':label[0][1]}
 
-    errorlist = re.findall(r'<ul class="([a-z0-9A-Z]*)"><li>([\s0-9A-Za-z]*)</li>',str(str_form))
-    try:
-        errorlist = {'class':errorlist[0][0],'content':errorlist[0][1]}
-    except:
-        errorlist = None
-
-    pic = re.findall(r'<img src="([/a-z0-9A-Z]*)" alt="([a-zA-Z0-9]*)" class="([a-zA-Z0-9]*)" />',str(str_form))
-    pic = {'src':pic[0][0],'alt':pic[0][1],'class':pic[0][2]}
-
-    input1 = re.findall(r'<input id="([_a-z0-9A-Z]*)" name="([_a-zA-Z0-9]*)" type="([a-zA-Z0-9]*)" value="([a-zA-Z0-9]*)" />',str(str_form))
-    input1 = {'id':input1[0][0],'name':input1[0][1],'type':input1[0][2],'value':input1[0][3]}
-
-    input2 = re.findall(r'<input autocomplete="([a-z0-9A-Z]*)" id="([_a-zA-Z0-9]*)" name="([_a-zA-Z0-9]*)" type="([a-zA-Z0-9]*)" />',str(str_form))
-    input2 = {'autocomplete':input2[0][0],'id':input2[0][1],'name':input2[0][2],'type':input2[0][3]}
-    str_form = {'label':label,'errorlist':errorlist,'pic':pic,'input1':input1,'input2':input2}
-    # print (str_form)
-    return str_form
 
 
 
 def Manage(request):
     if request.user.is_authenticated():
+        verifyFull(request.user.id)
         userinfoList = userinfo.objects.filter(belongs_id = request.user.id)
         return render_to_response('manage.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList})
 
@@ -214,3 +194,28 @@ def Add(request):
     else:# GET
         form = CaptchaTestForm()
     return render_to_response('add.html',{'captcha':form,'message':message, 'active_add':'active'},context_instance=RequestContext(request))
+
+def verifyOne(belongs_id,username,password,school):
+    users = userinfo.objects.filter(belongs_id = belongs_id, username = username, password = password, school = school,verify = False)
+    print (users)
+    for user in users:
+        if (school == 'uestc'):
+            status = UESTC(username,password).getStatus()
+            if (status == True):
+                user = userinfo.objects.filter(username = username, password = password, school = school).update(verify = True)
+            else:
+                pass
+        ### elif other school
+        else:
+            return False
+
+
+
+def verifyFull(belongs_id = 0):
+    users = userinfo.objects.filter(belongs_id = belongs_id)
+    for user in users:
+        if user.verify:
+            continue
+        else:
+            verifyOne(belongs_id, user.username, user.password, user.school)
+
