@@ -13,6 +13,7 @@ class userinfo(models.Model):
     email           = models.EmailField()
     school          = models.TextField()
     verify          = models.BooleanField() # is verify success
+    updatetime      = models.TimeField(auto_now = True)
     def __str__(self):
         return "%s, %s, %s, %s, %s, %s, %s" % (self.belongs_id, self.username, self.password, self.name, self.email, self.school, self.verify)
     class Admin:
