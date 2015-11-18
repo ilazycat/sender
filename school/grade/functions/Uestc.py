@@ -368,19 +368,19 @@ class uestc():
             return result.read().decode()
 
 
-def check(options):
-    user = uestc(options.username, options.password)
+def check(username,password):
+    user = uestc(username, password)
     return user.getStatus()
 
-def getRawCourse(options):
-    user = uestc(options.username, options.password)
+def getRawCourse(username,password):
+    user = uestc(username, password)
     if (user.getStatus() == True):
         return user.getMyGrade()
     else:
         return 'Authentication failed'
 
-def getCourseList(options):
-    user = uestc(options.username, options.password)
+def getCourseList(username,password):
+    user = uestc(username, password)
     if (user.getStatus() == True):
         grade = GradeAnalyzer(user.getMyGrade())
         grade.printTotal()
@@ -400,16 +400,26 @@ def main():
         parser.print_help()
         exit(0)
     if (options.function == 'check'):
-        print (check(options))
+        print (check(options.username,options.password))
     elif (options.function == 'rawCourse'):
-        print (getRawCourse(options))
+        print (getRawCourse(options.username,options.password))
     elif (options.function == 'courseList'):
-        print (getCourseList(options))
+        print (getCourseList(options.username,options.password))
     else:
         parser.print_help()
     exit(0)
 
 
+def Exec(username,password,function):
+    options = {'username':username,'password':password,'function':function}
+    if (function == 'check'):
+        return check(username,password)
+    elif (function == 'rawCourse'):
+        return getRawCourse(username,password)
+    elif (function == 'courseList'):
+        return getCourseList(username,password)
+    else:
+        return None
 
 if __name__ == '__main__':
     main()
