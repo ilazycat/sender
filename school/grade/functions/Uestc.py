@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from optparse import OptionParser
 import http.cookiejar
 from urllib.parse import urlencode
-
+from Uestc2db import DB_uestc
 def judgeExistMakeupGrade(gradeList):   #into is tempA, no u'',
     for i in range(0,len(gradeList),8):    # to 8
         if (re.findall(u'--',gradeList[6])):
@@ -329,10 +329,15 @@ class uestc():
         request = urllib.request.Request(
             url = self.loginURL,
             data = self.postData)
-        result = self.opener.open(request).read().decode()
+        try:
+            result = self.opener.open(request,timeout=5).read().decode()
+        except:
+            self.status = False
+            return 'Time Out'
         # This is verify mode
         WA = re.findall('Authentication failed',result)
-        if WA:
+        AC = re.findall('<li>欢迎您：',result)
+        if WA or not AC:
             self.status = False
         else:
             self.status = True
@@ -348,14 +353,20 @@ class uestc():
     def getEAS(self,getter = False):    #  click educational administration system
         request = urllib.request.Request(url = self.urlEAS)
         opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookies))
-        result = self.opener.open(request)
+        try:
+            result = self.opener.open(request,timeout=5)
+        except:
+            return 'Time Out'
         if (getter):
             return result.read().decode()
 
     def getCurriculumManager(self,getter = False):  # table
         request = urllib.request.Request(url = self.urlCurriculumManager)
         opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookies))
-        result = self.opener.open(request)
+        try:
+            result = self.opener.open(request,timeout=5)
+        except:
+            return 'Time Out'
         if (getter):
             return result.read().decode()
 
@@ -363,7 +374,10 @@ class uestc():
     def getMyGrade(self,getter = True):
         request = urllib.request.Request(url = self.urlMygrade)
         opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookies))
-        result = self.opener.open(request)
+        try:
+            result = self.opener.open(request,timeout=5)
+        except:
+            return 'Time Out'
         if (getter):
             return result.read().decode()
 

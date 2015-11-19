@@ -13,7 +13,8 @@ from django import forms
 from django.contrib.auth.models import User # 创建用户
 from captcha.fields import CaptchaField
 from captcha.models import CaptchaStore
-from uestc import UESTC
+from Uestc import Exec
+from Uestc2db import DB_uestc
 
 class CaptchaTestForm(forms.Form):
     captcha = CaptchaField()
@@ -166,7 +167,7 @@ def Manage(request):
 
 ## TODO: manage
 
-def Add(request):
+def Add(request):   #add an account for manage
     if not request.user.is_authenticated(): # user is login
         return HttpResponseRedirect('/login/')
     ####EDITING
@@ -197,10 +198,9 @@ def Add(request):
 
 def verifyOne(belongs_id,username,password,school):
     users = userinfo.objects.filter(belongs_id = belongs_id, username = username, password = password, school = school,verify = False)
-    print (users)
     for user in users:
         if (school == 'uestc'):
-            status = UESTC(username,password).getStatus()
+            status = Exec(username,password,'check')
             if (status == True):
                 user = userinfo.objects.filter(username = username, password = password, school = school).update(verify = True)
             else:
@@ -218,4 +218,18 @@ def verifyFull(belongs_id = 0):
             continue
         else:
             verifyOne(belongs_id, user.username, user.password, user.school)
+
+
+
+def Change(request):
+    return HttpResponseRedirect('/Add/')
+
+
+
+
+def Delete(request):
+    if not request.user.is_authenticated(): # user is login
+        return HttpResponseRedirect('/login/')
+    else:
+        pass
 

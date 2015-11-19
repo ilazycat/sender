@@ -43,14 +43,14 @@ class grades(models.Model):
 #the grade, one column match one grade :), username is for website
 #Please sort by username > school > academisc > semester
 
-    belongs_id      = models.IntegerField() # --> userinfo
+    belongs_id      = models.IntegerField(unique=True) # --> userinfo
     academisc       = models.CharField(max_length = 255, null=True)
-    semester        = models.IntegerField(null=True)
+    semester        = models.CharField(max_length=255,null=True)
     courseCode      = models.CharField(max_length = 255, null=True)
-    number          = models.CharField(max_length = 255, null=True)
-    courseName      = models.TextField(null=True)
+    number          = models.CharField(max_length = 255,null=False,unique=True)    ###
+    courseName      = models.TextField(null=False)  ###
     courseType      = models.TextField(null=True)
-    credit          = models.IntegerField(null=True)
+    credit          = models.CharField(max_length=255,null=True)
     totalGrade      = models.TextField(null=True)
     makeupGrade     = models.TextField(null=True)
     finalGrade      = models.TextField(null=True)
