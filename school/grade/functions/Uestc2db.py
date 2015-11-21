@@ -34,6 +34,8 @@ class DB_uestc:
             self.cu.execute(sql)
             print (sql)
         self.cx.commit()
+    def get(self):
+        return 'getter'
 
 
 
