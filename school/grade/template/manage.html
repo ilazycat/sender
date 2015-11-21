@@ -64,5 +64,13 @@ Fourth = view grades
 
 
 This is manage page for {{user}}
+    <script>
 
+    $(document).ready(function() {
+        $.get("../ajax_verify_full", function (data, status) {
+{#            alert("data:" + data + "\nstatus:" + status);#}
+        })
+    })
+
+    </script>
 {% endblock %}

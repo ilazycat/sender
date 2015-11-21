@@ -15,7 +15,7 @@ from captcha.fields import CaptchaField
 from captcha.models import CaptchaStore
 from Uestc import Exec
 from Uestc2db import DB_uestc
-
+import simplejson
 class CaptchaTestForm(forms.Form):
     captcha = CaptchaField()
 
@@ -161,7 +161,6 @@ def Manage(request):
         verifyFull(request.user.id)
         userinfoList = userinfo.objects.filter(belongs_id = request.user.id)
         return render_to_response('manage.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList})
-
     else:
         return HttpResponseRedirect('/login/')
 
@@ -209,14 +208,25 @@ def verifyOne(belongs_id,username,password,school):
         else:
             return False
 
+def VerifyFull_Ajax(request):
+    # there should return an alert to user: reload
+    if request.user.is_authenticated():
+        verifyFull(request.user.id)
+        result = '1'
+    else:
+        result= '0'
+    result = simplejson.dumps(result)
+    return HttpResponse(result)
 
 
 def verifyFull(belongs_id = 0):
+    #this is verify by login_user,not decided by post
     users = userinfo.objects.filter(belongs_id = belongs_id)
     for user in users:
         if user.verify:
             continue
         else:
+            print ('verify:'+user.username)
             verifyOne(belongs_id, user.username, user.password, user.school)
 
 

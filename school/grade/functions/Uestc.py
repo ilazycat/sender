@@ -9,6 +9,7 @@ from optparse import OptionParser
 import http.cookiejar
 from urllib.parse import urlencode
 from Uestc2db import DB_uestc
+import time
 def judgeExistMakeupGrade(gradeList):   #into is tempA, no u'',
     for i in range(0,len(gradeList),8):    # to 8
         if (re.findall(u'--',gradeList[6])):
@@ -303,40 +304,94 @@ class GradeAnalyzer:
 class uestc():
     def __init__(self, username, password):
         self.status = False
-        self.loginURL = "https://uis.uestc.edu.cn/amserver/UI/Login"
+        self.loginURL = "http://idas.uestc.edu.cn/authserver/login?service=http://portal.uestc.edu.cn/index.portal"
         self.urlEAS = "http://eams.uestc.edu.cn/eams/home.action"
         self.urlCurriculumManager = "http://eams.uestc.edu.cn/eams/home!childmenus.action?menu.id=844"
         self.urlMygrade = "http://eams.uestc.edu.cn/eams/teach/grade/course/person!historyCourseGrade.action?projectType=MAJOR"
         self.urlCourses = "http://eams.uestc.edu.cn/eams/courseTableForStd!courseTable.action"
+        self.loginURLCaptcha = "http://idas.uestc.edu.cn/authserver/needCaptcha.html?username="+username+"&_="+"0"#str(time.time())
         self.cookies = http.cookiejar.CookieJar()
+
+        self.headers = {
+                'Host': 'idas.uestc.edu.cn',
+                'Proxy-Connection': 'keep-alive',
+                'Cache-Control': 'max-age=0',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Origin': 'http://idas.uestc.edu.cn',
+                'Upgrade-Insecure-Requests': '1',
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Referer': 'http://idas.uestc.edu.cn/authserver/login?service=http://portal.uestc.edu.cn/index.portal',
+                'Accept-Encoding': 'gzip, deflate',
+                'Accept-Language': 'en-US,en;q=0.8',
+        }
+
+
+
+        # proxyConfig = '127.0.0.1:8080'
+        self.opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookies))
+        # self.opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookies),urllib.request.ProxyHandler({'http':proxyConfig}))
+        # to update self.status
+        request_getCookie = urllib.request.Request(url = self.loginURL, headers = self.headers)
+        # request_need = urllib.request.Request(url = self.loginURLCaptcha, headers = self.headers)
+        resulta = self.opener.open(request_getCookie).read().decode()
+        # resultb = self.opener.open(request_need).read().decode()
+        # print (resulta)
+
+        self.lt = re.findall('name="lt" value="(.*)"/>',resulta)[0]
+
         self.postData = urllib.parse.urlencode(
             {
-                'IDToken0':'',
-                'IDToken1':username,
-                'IDToken2':password,
-                'IDButton':'Submit',
-                'goto':'aHR0cDovL3BvcnRhbC51ZXN0Yy5lZHUuY24vbG9naW4ucG9ydGFs',
-                'encoded':'true',
-                'gx_charset':'UTF-8'
+                'username':username,
+                'password':password,
+                'lt':str(self.lt),
+                'dllt':'userNamePasswordLogin',
+                'execution':'e1s1',
+                '_eventId':'submit',
+                'rmShown':'1'
             }).encode(encoding='UTF8')
-        self.opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookies))
-        # to update self.status
+        # exit(0)
         self.getIndex()
 
 
     #first step to login, this is index page
     def getIndex(self,getter = False):     # login index page
-        request = urllib.request.Request(
-            url = self.loginURL,
-            data = self.postData)
+
+
+
         try:
-            result = self.opener.open(request,timeout=5).read().decode()
-        except:
+
+
+            request = urllib.request.Request(
+                url = self.loginURL,
+                data = self.postData,
+            )#headers = self.headers)
+
+            result = self.opener.open(request,timeout = 15).read().decode()
+            print (result)
+            # requesty = urllib.request.Request(
+            #     url = 'http://portal.uestc.edu.cn',)#headers = self.headers)
+            # resulty = self.opener.open(requesty, timeout=999).read().decode()
+        # except Exception as e:
+        #     print (e)
+        # try:
+
+            # request = urllib.request.Request(
+            #     url = 'http://portal.uestc.edu.cn/index.portal')
+            # result = self.opener.open(request, timeout=999).read().decode()
+            # print (result)
+            # for i in self.cookies:
+            #     print (i.name+':'+i.value)
+
+        except Exception as ex:
+            print (Exception, ex)
             self.status = False
             return 'Time Out'
         # This is verify mode
-        WA = re.findall('Authentication failed',result)
+        WA = re.findall('您提供的用户名或者密码有误',result)
+        # WA = False
         AC = re.findall('<li>欢迎您：',result)
+
         if WA or not AC:
             self.status = False
         else:
@@ -345,7 +400,7 @@ class uestc():
         if (getter):
             return result
 
-    # this is for user to get status
+        # this is for user to get status
     def getStatus(self):    # to user, return is login success, true: can, false: cannot
         return self.status
 
