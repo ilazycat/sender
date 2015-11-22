@@ -115,3 +115,8 @@ STATICFILES_URLS = (
 )
 
 LOGIN_URL='/login/'
+
+
+ADMINS = (
+    ('lc4t', 'lc4t0.0@gmail.com')
+)

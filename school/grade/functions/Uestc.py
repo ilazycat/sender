@@ -309,7 +309,7 @@ class uestc():
         self.urlCurriculumManager = "http://eams.uestc.edu.cn/eams/home!childmenus.action?menu.id=844"
         self.urlMygrade = "http://eams.uestc.edu.cn/eams/teach/grade/course/person!historyCourseGrade.action?projectType=MAJOR"
         self.urlCourses = "http://eams.uestc.edu.cn/eams/courseTableForStd!courseTable.action"
-        self.loginURLCaptcha = "http://idas.uestc.edu.cn/authserver/needCaptcha.html?username="+username+"&_="+"0"#str(time.time())
+        self.loginURLCaptcha = "http://idas.uestc.edu.cn/authserver/needCaptcha.html?username="+username+"&_="+str(time.time())
         self.cookies = http.cookiejar.CookieJar()
 
         self.headers = {
@@ -333,10 +333,11 @@ class uestc():
         # self.opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookies),urllib.request.ProxyHandler({'http':proxyConfig}))
         # to update self.status
         request_getCookie = urllib.request.Request(url = self.loginURL, headers = self.headers)
-        # request_need = urllib.request.Request(url = self.loginURLCaptcha, headers = self.headers)
+        request_need = urllib.request.Request(url = self.loginURLCaptcha, headers = self.headers)
+
         resulta = self.opener.open(request_getCookie).read().decode()
-        # resultb = self.opener.open(request_need).read().decode()
-        # print (resulta)
+        resultb = self.opener.open(request_need).read().decode()
+        print ('need captcha:'+resultb)
 
         self.lt = re.findall('name="lt" value="(.*)"/>',resulta)[0]
 
@@ -368,7 +369,7 @@ class uestc():
             )#headers = self.headers)
 
             result = self.opener.open(request,timeout = 15).read().decode()
-            print (result)
+            # print (result)
             # requesty = urllib.request.Request(
             #     url = 'http://portal.uestc.edu.cn',)#headers = self.headers)
             # resulty = self.opener.open(requesty, timeout=999).read().decode()
@@ -396,6 +397,7 @@ class uestc():
             self.status = False
         else:
             self.status = True
+        print (self.status)
         # Verify mode END
         if (getter):
             return result

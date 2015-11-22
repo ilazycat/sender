@@ -191,6 +191,8 @@ def Add(request):   #add an account for manage
                     message = 'You had added this account.'
             else:#no username,password value
                 message = 'What are you doing?'
+        else:
+            message = 'code was wrong'
     else:# GET
         form = CaptchaTestForm()
     return render_to_response('add.html',{'captcha':form,'message':message, 'active_add':'active'},context_instance=RequestContext(request))
@@ -212,9 +214,9 @@ def VerifyFull_Ajax(request):
     # there should return an alert to user: reload
     if request.user.is_authenticated():
         verifyFull(request.user.id)
-        result = '1'
+        result = {'status':'1'}
     else:
-        result= '0'
+        result= {'status':'0'}
     result = simplejson.dumps(result)
     return HttpResponse(result)
 
@@ -231,15 +233,68 @@ def verifyFull(belongs_id = 0):
 
 
 
-def Change(request):
-    return HttpResponseRedirect('/Add/')
+def Change(request, userinfoID):
+    if not request.user.is_authenticated(): # user is login
+        return HttpResponseRedirect('/login/')
+    ####EDITING
+    message = None
+    users = userinfo.objects.filter(id = userinfoID)[0]
+
+    try:
+        if (request.user.id == users.belongs_id):
+            username = users.username
+            password = users.password
+            email = users.email
+            school = users.school
+        else:
+            # NO permission
+            result= {'status':'-1', 'message':'No permission' }
+            result = simplejson.dumps(result)
+            return HttpResponse(result)
+    except Exception as e:
+        result= {'status':'-1', 'message':'something was wrong' }
+        result = simplejson.dumps(result)
+        return HttpResponse(result)
+
+
+
+    if request.POST:
+        form = CaptchaTestForm(request.POST)
+        if form.is_valid():
+            human = True
+            if ('username' in request.POST and 'password' in request.POST  and 'school' in request.POST):
+                username   = request.POST.get('username','')
+                password   = request.POST.get('password','')
+                email      = request.POST.get('email','')
+                school     = request.POST.get('school','')
+                try:#userinfo change
+                    users.username = username
+                    users.password = password
+                    users.email = email
+                    users.school = school
+                    users.save()
+                    return HttpResponseRedirect('/manage/')
+                except:# error?
+                    message = 'This user cannot change.'
+            else:#no username,password value
+                message = 'What are you doing?'
+        else:
+            message = 'code was wrong'
+    else:# GET
+        form = CaptchaTestForm()
+    return render_to_response('change.html',{'username':username, 'password':password, 'email':email, 'school':school, 'captcha':form,'message':message, 'active_add':'active'},context_instance=RequestContext(request))
 
 
 
 
-def Delete(request):
+
+def Delete(request, userinfoID):
     if not request.user.is_authenticated(): # user is login
         return HttpResponseRedirect('/login/')
     else:
-        pass
+        userinfo.objects.filter(id = userinfoID).delete()
+        result= {'status':'0', 'message':'delete ' + userinfoID}
+        result = simplejson.dumps(result)
+        return HttpResponse(result)
+
 
