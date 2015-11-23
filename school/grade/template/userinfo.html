@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+
+
+{% block title%}
+{{title}}
+{% endblock %}
+{% block content %}
+
+{% include "header.html"%}
+
+
+
+
+This is view grade
+
+<table class="table table-hover table-bordered">
+
+<tr>
+  <td class="info">#</td>
+  <td class="info">school</td>
+  <td class="info">username</td>
+  <td class="info">email</td>
+  <td class="info">status</td>
+  <td class="info">check</td>
+</tr>
+
+{% for one in userinfo %}
+<tr>
+  {% if one.verify %}
+    <td class="success">{{forloop.counter}}</td>
+    <td class="success">{{one.school}}</td>
+    <td class="success"><a href="/userinfo/{{one.id}}">{{one.username}}</a></td>
+    {% if one.email%}
+      <td class="success">{{one.email}}</td>
+      {% else %}
+      <td class="success">None</td>
+    {% endif %}
+    <td class="success">{{one.verify}}</td>
+    <td class="success"><a href='javascript:deleteUser({{ one.id }})'>delete</a></td>
+  {% else %}
+    <td class="danger">{{forloop.counter}}</td>
+    <td class="danger">{{one.school}}</td>
+    <td class="danger"><a href="/userinfo/{{one.id}}">{{one.username}}</a></td>
+    {% if one.email%}
+      <td class="danger">{{one.email}}</td>
+      {% else %}
+      <td class="danger">None</td>
+    {% endif %}
+    <td class="danger">{{one.verify}}</td>
+    <td class="danger"><a href='/userinfo/change/{{ one.id }}'>change</a>
+                       <a href='javascript:deleteUser({{ one.id }})'>delete</a></td>
+  {% endif %}
+
+</tr>
+
+{% endfor %}
+
+
+
+
+</table>
+
+
+This is manage page for {{user}}
+    <script>
+
+    $(document).ready(function() {
+        $.get("/userinfo/ajax_verify_full/", function (data, status) {})
+    });
+
+    function deleteUser(userinfoID)
+    {
+        $.get("/userinfo/delete/"+userinfoID, function (data, status) {});
+        setTimeout("window.location.reload();",1000);
+    }
+    </script>
+{% endblock %}

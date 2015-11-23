@@ -1,4 +1,5 @@
-
+# -*- coding:UTF-8 -*-
+__author__ = 'lc4t'
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
@@ -13,8 +14,9 @@ from django import forms
 from django.contrib.auth.models import User # 创建用户
 from captcha.fields import CaptchaField
 from captcha.models import CaptchaStore
+import subprocess
 from Uestc import Exec
-from Uestc2db import DB_uestc
+# from Uestc2db import DB_uestc
 import simplejson
 class CaptchaTestForm(forms.Form):
     captcha = CaptchaField()
@@ -158,13 +160,29 @@ def Home(request):
 
 def Manage(request):
     if request.user.is_authenticated():
-        verifyFull(request.user.id)
         userinfoList = userinfo.objects.filter(belongs_id = request.user.id)
         return render_to_response('manage.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList})
     else:
         return HttpResponseRedirect('/login/')
 
-## TODO: manage
+
+
+def Grade(request):
+    if request.user.is_authenticated():
+        userinfoList = userinfo.objects.filter(belongs_id = request.user.id)
+        return render_to_response('grade.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList})
+    else:
+        return HttpResponseRedirect('/login/')
+#TODO : NO function to this
+
+def Userinfo(request, userinfoID):
+    #TODO: select what user wants, check the grades here
+    if request.user.is_authenticated():
+        userinfoList = userinfo.objects.filter(belongs_id = request.user.id)
+        grades = grades.objects.filter(belongs_id = userinfoID)
+        return render_to_response('userinfo.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList, 'grades':grades})
+    else:
+        return HttpResponseRedirect('/login/')
 
 def Add(request):   #add an account for manage
     if not request.user.is_authenticated(): # user is login
@@ -202,10 +220,21 @@ def verifyOne(belongs_id,username,password,school):
     for user in users:
         if (school == 'uestc'):
             status = Exec(username,password,'check')
+            # p = subprocess.Popen('python grade/functions/Uestc.py -u '+username+' -p '+password+' -f check', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            # for line in p.stdout.readlines():
+            #     print (line)
+            # assert False
+            print (status)
+            # try:
+            #     status = Exec(username,password,'check')
+            #     print (status)
+            # except Exception as e:
+            #     print (e)
+            #     return e
             if (status == True):
                 user = userinfo.objects.filter(username = username, password = password, school = school).update(verify = True)
             else:
-                pass
+                return status
         ### elif other school
         else:
             return False
@@ -213,11 +242,14 @@ def verifyOne(belongs_id,username,password,school):
 def VerifyFull_Ajax(request):
     # there should return an alert to user: reload
     if request.user.is_authenticated():
-        verifyFull(request.user.id)
-        result = {'status':'1'}
+        # try:
+        message = verifyFull(request.user.id)
+        result= {'status':'1','message':message}
+        # except:
+        #     result= {'status':'0','message':'fail to verify'}
     else:
-        result= {'status':'0'}
-    result = simplejson.dumps(result)
+        result= {'status':'0','message':'You are not login'}
+    # result = simplejson.dumps(result)
     return HttpResponse(result)
 
 
@@ -228,8 +260,8 @@ def verifyFull(belongs_id = 0):
         if user.verify:
             continue
         else:
-            print ('verify:'+user.username)
-            verifyOne(belongs_id, user.username, user.password, user.school)
+            # print ('verify:'+user.username)
+            return verifyOne(belongs_id, user.username, user.password, user.school)
 
 
 

@@ -54,20 +54,20 @@ class TermStruct:
         pass
         # for i in range(0,self.__length__,1):
         #     print (self.academicYear[i],end=' ')
-        #     print ("第",end=' ')
+        #     print (u"第",end=' ')
         #     print (self.term[i],end=' ')
-        #     print ("学期 共",end=' ')
+        #     print (u"学期 共",end=' ')
         #     print (self.numberOfCourses[i],end=' ')
-        #     print ("门课 总学分",end=' ')
+        #     print (u"门课 总学分",end=' ')
         #     print (self.totalCredit[i],end=' ')
-        #     print ("平均绩点",end=' ')
+        #     print (u"平均绩点",end=' ')
         #     print (self.gpa[i])
 
     def printFinal(self):
-        # print ("总课程数:",self.all[0],end=' ')
-        # print ("总学分:",self.all[1],end=' ')
-        # print ("总评绩点:",self.all[2])
-        # # print "统计时间:",self.time[0]
+        # print (u"总课程数:",self.all[0],end=' ')
+        # print (u"总学分:",self.all[1],end=' ')
+        # print (u"总评绩点:",self.all[2])
+        # # print (u"统计时间:",self.time[0])
         pass
 
     def getTerm(self, number):
@@ -138,7 +138,7 @@ class Coursestruct:
                 self.courseGrade.append(100)
                 self.courseFinal.append(100)
             else:
-                print ("发现不知名的成绩..")
+                print (u"发现不知名的成绩..")
 
         if (self.courseGrade[self.count] >= 85):
             self.courseGPA.append(4)
@@ -156,9 +156,9 @@ class Coursestruct:
     def printCourses(self):
         for i in range(0,self.count, 1):
             print (self.academicYear[i],end=' ')
-            print ("第",end=' ')
+            print (u"第",end=' ')
             print (self.semester[i],end=' ')
-            print ("学期",end=' ')
+            print (u"学期",end=' ')
             # print (self.courseCode[i],)
             # print (self.courseNumber[i],)
             # print (self.courseType,)
@@ -168,43 +168,19 @@ class Coursestruct:
             # print ("-------------------------------------------> ",)
             print ("----------------------> ",end=' ')
             print (self.courseCredit[i],end=' ')
-            print ("学分",end=' ')
-            print ("总评",end=' ')
+            print (u"学分",end=' ')
+            print (u"总评",end=' ')
             print (self.courseGrade[i],end=' ')
-            print ("最终",end=' ')
+            print (u"最终",end=' ')
             print (self.courseFinal[i],end=' ')
-            print ("单科绩点",self.courseGPA[i],)
+            print (u"单科绩点",self.courseGPA[i],)
             if (self.isMakeup == 1 and self.makeupGrade[i] != '--'):
-                print ("补考成绩 ",end=' ')
+                print (u"补考成绩 ",end=' ')
                 print (self.makeupGrade[i])
             else:
                 print ("")
     def getCoursesJSON(self):
-        # for i in range(0,self.count, 1):
-        #     print (self.academicYear[i],end=' ')
-        #     print ("第",end=' ')
-        #     print (self.semester[i],end=' ')
-        #     print ("学期",end=' ')
-        #     print (self.courseCode[i].decode(),)
-        #     print (self.courseNumber[i].decode(),)
-        #     # print (self.courseType[i],)
-        #     print (" --> ",)
-        #     print (self.courseName[i].encode('utf-8').decode(),end=' ')
-        #     print (self.courseType[i].encode('utf-8').decode())
-        #     # print ("-------------------------------------------> ",)
-        #     print ("----------------------> ",end=' ')
-        #     print (self.courseCredit[i],end=' ')
-        #     print ("学分",end=' ')
-        #     print ("总评",end=' ')
-        #     print (self.courseGrade[i],end=' ')
-        #     print ("最终",end=' ')
-        #     print (self.courseFinal[i],end=' ')
-        #     print ("单科绩点",self.courseGPA[i],)
-        #     if (self.isMakeup == 1 and self.makeupGrade[i] != '--'):
-        #         print ("补考成绩 ",end=' ')
-        #         print (self.makeupGrade[i])
-        #     else:
-        #         print ("")
+
         li = []
         for i in range(0,self.count, 1):
             newDict = {'academisc':self.academicYear[i],
@@ -221,18 +197,7 @@ class Coursestruct:
             li.append(newDict)
 
         return li
-    #         belongs_id      = models.IntegerField() # --> userinfo
-    # academisc       = models.CharField(max_length = 255, null=True)
-    # semester        = models.IntegerField(null=True)
-    # courseCode      = models.CharField(max_length = 255, null=True)
-    # number          = models.CharField(max_length = 255, null=True)
-    # courseName      = models.TextField(null=True)
-    # courseType      = models.TextField(null=True)
-    # credit          = models.IntegerField(null=True)
-    # totalGrade      = models.TextField(null=True)
-    # makeupGrade     = models.TextField(null=True)
-    # finalGrade      = models.TextField(null=True)
-    # gradePoint      = models.CharField(max_length = 255, null=True)
+
 
 
 class GradeAnalyzer:
@@ -335,9 +300,14 @@ class uestc():
         request_getCookie = urllib.request.Request(url = self.loginURL, headers = self.headers)
         request_need = urllib.request.Request(url = self.loginURLCaptcha, headers = self.headers)
 
-        resulta = self.opener.open(request_getCookie).read().decode()
-        resultb = self.opener.open(request_need).read().decode()
-        print ('need captcha:'+resultb)
+
+
+        resulta = self.opener.open(request_getCookie, timeout = 30).read().decode()
+        # exit(0)
+        # resulta = resulta.decode()
+        # assert len(resulta)>100
+        resultb = self.opener.open(request_need, timeout = 30).read().decode()
+        # print ('need captcha:'+resultb)
 
         self.lt = re.findall('name="lt" value="(.*)"/>',resulta)[0]
 
@@ -362,13 +332,12 @@ class uestc():
 
         try:
 
-
             request = urllib.request.Request(
                 url = self.loginURL,
                 data = self.postData,
             )#headers = self.headers)
 
-            result = self.opener.open(request,timeout = 15).read().decode()
+            result = self.opener.open(request,timeout = 30).read().decode()
             # print (result)
             # requesty = urllib.request.Request(
             #     url = 'http://portal.uestc.edu.cn',)#headers = self.headers)
@@ -385,19 +354,19 @@ class uestc():
             #     print (i.name+':'+i.value)
 
         except Exception as ex:
-            print (Exception, ex)
-            self.status = False
-            return 'Time Out'
+            # print (Exception, ex)
+            self.status = str(ex)
+            # return 'Time Out'
         # This is verify mode
-        WA = re.findall('您提供的用户名或者密码有误',result)
+        WA = re.findall(u'您提供的用户名或者密码有误',result)
         # WA = False
-        AC = re.findall('<li>欢迎您：',result)
+        AC = re.findall(u'<li>欢迎您：',result)
 
         if WA or not AC:
-            self.status = False
+            self.status = 'Username or Password wrong'
         else:
             self.status = True
-        print (self.status)
+        # print (self.status)
         # Verify mode END
         if (getter):
             return result
@@ -411,7 +380,7 @@ class uestc():
         request = urllib.request.Request(url = self.urlEAS)
         opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookies))
         try:
-            result = self.opener.open(request,timeout=5)
+            result = self.opener.open(request,timeout = 30)
         except:
             return 'Time Out'
         if (getter):
