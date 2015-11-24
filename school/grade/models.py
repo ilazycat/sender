@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib import admin
 from django.contrib import auth
-
+import datetime
 
 class userinfo(models.Model):
 #the school protal infomation,for login the school website
@@ -13,11 +13,11 @@ class userinfo(models.Model):
     email           = models.EmailField()
     school          = models.TextField()
     verify          = models.BooleanField() # is verify success
-    updatetime      = models.TimeField(auto_now = True)
+    updateTime      = models.TimeField(auto_now = True)
     def __str__(self):
-        return "%s, %s, %s, %s, %s, %s, %s" % (self.belongs_id, self.username, self.password, self.name, self.email, self.school, self.verify)
+        return "%s, %s, %s, %s, %s, %s, %s, %s" % (self.belongs_id, self.username, self.password, self.name, self.email, self.school, self.verify, self.updateTime)
     class Admin:
-        list_display = ("belongs_id","name","username", "password", "email", "school", "verify", "verify")
+        list_display = ("belongs_id","name","username", "password", "email", "school", "verify", "updateTime")
         # pass
     class Meta:
         ordering = ["belongs_id"]
@@ -55,12 +55,13 @@ class grades(models.Model):
     makeupGrade     = models.TextField(null=True)
     finalGrade      = models.TextField(null=True)
     gradePoint      = models.CharField(max_length = 255, null=True)
+    updateTime      = models.CharField(max_length = 19, null=False)
 #TODO: add time
     def __str__(self):
-        return "%s, %s, %d, %s, %s, %s, %s, %d, %s, %s, %s, %s" % (self.username, self.academisc, self.semester, self.courseCode, self.number, self.courseType, self.credit, self.totalGrade, self.makeupGrade, self.finalGrade, self.gradePoint)
+        return "%d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" % (self.belongs_id, self.academisc, self.semester, self.courseCode, self.number, self.courseName, self.courseType, self.credit, self.totalGrade, self.makeupGrade, self.finalGrade, self.gradePoint, self.updateTime)
 
     class Admin:
-        list_display = ("belongs_id", "academisc", "semester", "courseCode", "number", "courseType", "credit", "totalGrade", "makeupGrade", "finalGrade", "gradePoint")
+        list_display = ("belongs_id", "academisc", "semester", "courseCode", "number", "courseType", "credit", "totalGrade", "makeupGrade", "finalGrade", "gradePoint", "updateTime")
 
     class Meta:
         ordering = ["belongs_id"]

@@ -179,9 +179,9 @@ def Grade(request):
 def Userinfo(request, userinfoID):
     #TODO: select what user wants, check the grades here
     if request.user.is_authenticated():
-        userinfoList = userinfo.objects.filter(belongs_id = request.user.id)
+        userinfoList = userinfo.objects.filter(id = userinfoID)
         gradeList = grades.objects.filter(belongs_id = userinfoID)
-        return render_to_response('userinfo.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList, 'gradeList':gradeList})
+        return render_to_response('userinfo.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList, 'gradeList':gradeList,'oneDay':((datetime.datetime.now() - datetime.timedelta(days = 1))).strftime("%Y-%m-%d %H:%M:%S")})
     else:
         return HttpResponseRedirect('/login/')
 

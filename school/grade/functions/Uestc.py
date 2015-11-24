@@ -220,7 +220,6 @@ class GradeAnalyzer:
 
         self.griddata_even = self.soup.select(".griddata-even")
         self.griddata_odd  = self.soup.select(".griddata-odd")
-
         self.griddata = []
         for i in range(0, len(self.griddata_even) - 1, 1):
             self.griddata.append(self.griddata_even[i].get_text())
@@ -241,7 +240,6 @@ class GradeAnalyzer:
         else:
             ### 2,4,6,8 term
             # print (self.griddata_even[-1].get_text().encode('ascii','ignore').decode())
-
             self.griddata.append(self.griddata_even[-1].get_text().encode('ascii','ignore').decode().strip().split())
             self.griddata.append(self.griddata_odd[-1].get_text().encode('ascii','ignore').decode().strip('\n').strip(':').split('\n'))
 

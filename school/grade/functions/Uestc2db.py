@@ -2,7 +2,7 @@
 __author__ = 'lc4t'
 
 import sqlite3
-
+import datetime
 
 
 class DB_uestc:
@@ -22,13 +22,11 @@ class DB_uestc:
         self.credit = 'credit'
         self.semester = 'semester'
         self.totalGrade = 'totalGrade'
+
     def add(self, li):#private
         for one in li:
-            # sql = print ("insert into %s (belongs_id, academisc, semester, courseCode, number, courseName, courseType, credit, totalGrade, makeupGrade, finalGrade, gradePoint) values(%d,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');" % (self.table, belongs_id,one[academisc], one[semester],one[courseCode],one[number],one[courseName],one[courseType],one[credit],str(one[totalGrade]),one[makeupGrade],str(one[finalGrade]),str(one[gradePoint])))            # print (s)
-
-            # sql = "insert into "+self.table+" (belongs_id, academisc, semester, courseCode, number, courseName, courseType, credit, totalGrade, makeupGrade, finalGrade, gradePoint) values("+str(self.belongs_id)+",'"+one[self.academisc]+"','"+one[self.semester]+"','"+one[self.courseCode]+"','"+one[self.number]+"','"+one[self.courseName]+"','"+one[self.courseType]+"','"+one[self.credit]+"','"+str(one[self.totalGrade])+"','"+one[self.makeupGrade]+"','"+str(one[self.finalGrade])+"','"+str(one[self.gradePoint])+"');"
-            sql = sql = "insert into "+self.table+" (belongs_id, academisc, semester, courseCode, number, courseName, courseType, credit, totalGrade, makeupGrade, finalGrade, gradePoint) select "+str(self.belongs_id)+",'"+one[self.academisc]+"','"+one[self.semester]+"','"+one[self.courseCode]+"','"+one[self.number]+"','"+one[self.courseName]+"','"+one[self.courseType]+"','"+one[self.credit]+"','"+str(one[self.totalGrade])+"','"+one[self.makeupGrade]+"','"+str(one[self.finalGrade])+"','"+str(one[self.gradePoint])+"' where not exists(select * from "+self.table+" where belongs_id="+str(self.belongs_id)+" and number='"+one[self.number]+"');"
-            print (sql)
+            sql = "insert into "+self.table+" (belongs_id, academisc, semester, courseCode, number, courseName, courseType, credit, totalGrade, makeupGrade, finalGrade, gradePoint, updateTime) select "+str(self.belongs_id)+",'"+one[self.academisc]+"','"+one[self.semester]+"','"+one[self.courseCode]+"','"+one[self.number]+"','"+one[self.courseName]+"','"+one[self.courseType]+"','"+one[self.credit]+"','"+str(one[self.totalGrade])+"','"+one[self.makeupGrade]+"','"+str(one[self.finalGrade])+"','"+str(one[self.gradePoint])+"','"+str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))+"' where not exists(select * from "+self.table+" where belongs_id="+str(self.belongs_id)+" and number='"+one[self.number]+"');"
+            # print (sql)
             self.cu.execute(sql)
         self.cx.commit()
     def delete(self, li):#private
@@ -36,15 +34,14 @@ class DB_uestc:
             # delete if not equal
 
             sql = "delete from "+self.table+" where number='"+one[self.number]+"' and belongs_id="+str(self.belongs_id)+" and (makeupGrade<>'"+one[self.makeupGrade]+"' or finalGrade<>'"+str(one[self.finalGrade])+"')"
-            print (sql)
+
             self.cu.execute(sql)
 
         self.cx.commit()
     def sync(self, li):# exec this
         self.delete(li)
         self.add(li)
-    def get(self):  # exec this
-        return 'getter'
+
 
 
 

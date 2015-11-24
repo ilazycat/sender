@@ -7,7 +7,7 @@
 {% endblock %}
 {% block content %}
 
-{% include "header.html"%}
+{#{% include "header.html"%}#}
 
 
 
@@ -62,7 +62,8 @@ This is view grade
 </table>
 <hr/>
 
-<table class="table table-hover table-bordered">
+<table id="grade" class="table table-hover table-bordered display" cellspacing="0">
+<thead>
 <tr>
     <td class="info">#</td>
     <td class="info">学年</td>
@@ -75,39 +76,59 @@ This is view grade
     <td class="info">补考</td>
     <td class="info">最终</td>
     <td class="info">学分</td>
+    <td class="info">updateTime</td>
 
 </tr>
+</thead>
 
 
+{{ oneDay }}
 {% for one in gradeList %}
     <tr>
-      {% if one.finalGrade > '60' or one.finalGrade >= '100'  %}
-        <td class="success">{{forloop.counter}}</td>
-        <td class="success">{{one.academisc}}</td>
-        <td class="success">{{one.semester}}</td>
-        <td class="success">{{one.number}}</td>
-        <td class="success">{{one.courseName}}</td>
-        <td class="success">{{one.courseType}}</td>
-        <td class="success">{{one.credit}}</td>
-        <td class="success">{{one.totalGrade}}</td>
-        <td class="success">{{one.makeupGrade}}</td>
-        <td class="success">{{one.finalGrade}}</td>
-        <td class="success">{{one.gradePoint}}</td>
 
-      {% else %}
-        <td class="danger">{{forloop.counter}}</td>
-        <td class="danger">{{one.academisc}}</td>
-        <td class="danger">{{one.semester}}</td>
-        <td class="danger">{{one.number}}</td>
-        <td class="danger">{{one.courseName}}</td>
-        <td class="danger">{{one.courseType}}</td>
-        <td class="danger">{{one.credit}}</td>
-        <td class="danger">{{one.totalGrade}}</td>
-        <td class="danger">{{one.makeupGrade}}</td>
-        <td class="danger">{{one.finalGrade}}</td>
-        <td class="danger">{{one.gradePoint}}</td>
-      {% endif %}
+    {% if one.updateTime > oneDay %}
+        <td class="warning new_grade">{{forloop.counter}}</td>
+        <td class="warning new_grade">{{one.academisc}}</td>
+        <td class="warning new_grade">{{one.semester}}</td>
+        <td class="warning new_grade">{{one.number}}</td>
+        <td class="warning new_grade">{{one.courseName}}</td>
+        <td class="warning new_grade">{{one.courseType}}</td>
+        <td class="warning new_grade">{{one.credit}}</td>
+        <td class="warning new_grade">{{one.totalGrade}}</td>
+        <td class="warning new_grade">{{one.makeupGrade}}</td>
+        <td class="warning new_grade">{{one.finalGrade}}</td>
+        <td class="warning new_grade">{{one.gradePoint}}</td>
+        <td class="warning new_grade">{{one.updateTime}}</td>
+    {% else %}
+        {% if one.finalGrade > '60' or  one.finalGrade == '100'  %}
+            <td class="success">{{forloop.counter}}</td>
+            <td class="success">{{one.academisc}}</td>
+            <td class="success">{{one.semester}}</td>
+            <td class="success">{{one.number}}</td>
+            <td class="success">{{one.courseName}}</td>
+            <td class="success">{{one.courseType}}</td>
+            <td class="success">{{one.credit}}</td>
+            <td class="success">{{one.totalGrade}}</td>
+            <td class="success">{{one.makeupGrade}}</td>
+            <td class="success">{{one.finalGrade}}</td>
+            <td class="success">{{one.gradePoint}}</td>
+            <td class="success">{{one.updateTime}}</td>
 
+        {% else %}
+            <td class="danger">{{forloop.counter}}</td>
+            <td class="danger">{{one.academisc}}</td>
+            <td class="danger">{{one.semester}}</td>
+            <td class="danger">{{one.number}}</td>
+            <td class="danger">{{one.courseName}}</td>
+            <td class="danger">{{one.courseType}}</td>
+            <td class="danger">{{one.credit}}</td>
+            <td class="danger">{{one.totalGrade}}</td>
+            <td class="danger">{{one.makeupGrade}}</td>
+            <td class="danger">{{one.finalGrade}}</td>
+            <td class="danger">{{one.gradePoint}}</td>
+            <td class="success">{{one.updateTime}}</td>
+        {% endif %}
+    {% endif %}
     </tr>
 
 {% endfor %}
@@ -117,11 +138,23 @@ This is view grade
 
 
 This is manage page for you to look grade
+
+    <style type="text/css">
+    .new_grade
+    {
+        
+    }
+    </style>
     <script>
 
-    $(document).ready(function() {
-        $.get("/userinfo/ajax_verify_full/", function (data, status) {})
-    });
+    $(document).ready(function()
+    {
+        $('#grade').DataTable({
+        "order": [[ 11, "desc" ]]
+        } );
+    } );
+
+
 
     function deleteUser(userinfoID)
     {
