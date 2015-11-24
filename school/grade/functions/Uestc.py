@@ -8,8 +8,9 @@ from bs4 import BeautifulSoup
 from optparse import OptionParser
 import http.cookiejar
 from urllib.parse import urlencode
-from Uestc2db import DB_uestc
 import time
+
+
 def judgeExistMakeupGrade(gradeList):   #into is tempA, no u'',
     for i in range(0,len(gradeList),8):    # to 8
         if (re.findall(u'--',gradeList[6])):
@@ -429,12 +430,13 @@ def getCourseList(username,password):
         return 'Authentication failed'
 
 
+
 def main():
     usage = "usage: %prog [options] arg"
     parser = OptionParser()
     parser.add_option('-u', '--username', help = 'Your username')
     parser.add_option('-p', '--password', help = 'Your password')
-    parser.add_option('-f', '--function', help = '1.check: check login.  2.rawCourse: get source of grade page. 3.courseList: get courseList')
+    parser.add_option('-f', '--function', help = '1.check: check login.  2.rawCourse: get source of grade page. 3.courseList: get courseList.')
     (options, args) = parser.parse_args()
     if (options.username == None or options.password == None or options.function == None):
         parser.print_help()

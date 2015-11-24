@@ -16,7 +16,7 @@ from captcha.fields import CaptchaField
 from captcha.models import CaptchaStore
 import subprocess
 from Uestc import Exec
-# from Uestc2db import DB_uestc
+from Uestc2db import DB_uestc
 import simplejson
 class CaptchaTestForm(forms.Form):
     captcha = CaptchaField()
@@ -168,6 +168,7 @@ def Manage(request):
 
 
 def Grade(request):
+
     if request.user.is_authenticated():
         userinfoList = userinfo.objects.filter(belongs_id = request.user.id)
         return render_to_response('grade.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList})
@@ -179,10 +180,35 @@ def Userinfo(request, userinfoID):
     #TODO: select what user wants, check the grades here
     if request.user.is_authenticated():
         userinfoList = userinfo.objects.filter(belongs_id = request.user.id)
-        grades = grades.objects.filter(belongs_id = userinfoID)
-        return render_to_response('userinfo.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList, 'grades':grades})
+        gradeList = grades.objects.filter(belongs_id = userinfoID)
+        return render_to_response('userinfo.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList, 'gradeList':gradeList})
     else:
         return HttpResponseRedirect('/login/')
+
+def AddGrade_Ajax(request, userinfoID = 0):
+    print (userinfoID)
+    if request.user.is_authenticated():
+        # try:
+        user = userinfo.objects.filter(id = userinfoID)[0]
+        li = Exec(user.username, user.password, 'courseList')
+        db = DB_uestc(userinfoID)
+        db.sync(li)
+        result= {'status':'1','message':'sync done'}
+        # except Exception as e:
+        #     result = {'status': '0', 'message': str(e)}
+
+
+
+    else:
+        result= {'status':'0','message':'You are not login'}
+    result = simplejson.dumps(result)
+    return HttpResponse(result)
+
+
+
+
+
+
 
 def Add(request):   #add an account for manage
     if not request.user.is_authenticated(): # user is login
@@ -219,37 +245,27 @@ def verifyOne(belongs_id,username,password,school):
     users = userinfo.objects.filter(belongs_id = belongs_id, username = username, password = password, school = school,verify = False)
     for user in users:
         if (school == 'uestc'):
-            status = Exec(username,password,'check')
-            # p = subprocess.Popen('python grade/functions/Uestc.py -u '+username+' -p '+password+' -f check', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            # for line in p.stdout.readlines():
-            #     print (line)
-            # assert False
-            print (status)
-            # try:
-            #     status = Exec(username,password,'check')
-            #     print (status)
-            # except Exception as e:
-            #     print (e)
-            #     return e
+            try:
+                status = Exec(username,password,'check')
+            except Exception as e:
+                status = e
             if (status == True):
                 user = userinfo.objects.filter(username = username, password = password, school = school).update(verify = True)
+                return True
             else:
                 return status
         ### elif other school
         else:
-            return False
+            return 'No this school'
 
 def VerifyFull_Ajax(request):
     # there should return an alert to user: reload
     if request.user.is_authenticated():
-        # try:
         message = verifyFull(request.user.id)
-        result= {'status':'1','message':message}
-        # except:
-        #     result= {'status':'0','message':'fail to verify'}
+        result= {'status':'1','message':str(message)}
     else:
         result= {'status':'0','message':'You are not login'}
-    # result = simplejson.dumps(result)
+    result = simplejson.dumps(result)
     return HttpResponse(result)
 
 
@@ -258,7 +274,7 @@ def verifyFull(belongs_id = 0):
     users = userinfo.objects.filter(belongs_id = belongs_id)
     for user in users:
         if user.verify:
-            continue
+            return True
         else:
             # print ('verify:'+user.username)
             return verifyOne(belongs_id, user.username, user.password, user.school)

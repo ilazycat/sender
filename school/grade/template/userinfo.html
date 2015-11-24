@@ -25,10 +25,10 @@ This is view grade
   <td class="info">check</td>
 </tr>
 
-{% for one in userinfo %}
+{% for one in userinfoList %}
 <tr>
   {% if one.verify %}
-    <td class="success">{{forloop.counter}}</td>
+    <td class="success">{{one.id}}</td>
     <td class="success">{{one.school}}</td>
     <td class="success"><a href="/userinfo/{{one.id}}">{{one.username}}</a></td>
     {% if one.email%}
@@ -39,7 +39,7 @@ This is view grade
     <td class="success">{{one.verify}}</td>
     <td class="success"><a href='javascript:deleteUser({{ one.id }})'>delete</a></td>
   {% else %}
-    <td class="danger">{{forloop.counter}}</td>
+    <td class="danger">{{one.id}}</td>
     <td class="danger">{{one.school}}</td>
     <td class="danger"><a href="/userinfo/{{one.id}}">{{one.username}}</a></td>
     {% if one.email%}
@@ -60,9 +60,63 @@ This is view grade
 
 
 </table>
+<hr/>
+
+<table class="table table-hover table-bordered">
+<tr>
+    <td class="info">#</td>
+    <td class="info">学年</td>
+    <td class="info">学期</td>
+    <td class="info">课程编号</td>
+    <td class="info">课程内容</td>
+    <td class="info">课程类型</td>
+    <td class="info">满学分</td>
+    <td class="info">总评</td>
+    <td class="info">补考</td>
+    <td class="info">最终</td>
+    <td class="info">学分</td>
+
+</tr>
 
 
-This is manage page for {{user}}
+{% for one in gradeList %}
+    <tr>
+      {% if one.finalGrade > '60' or one.finalGrade >= '100'  %}
+        <td class="success">{{forloop.counter}}</td>
+        <td class="success">{{one.academisc}}</td>
+        <td class="success">{{one.semester}}</td>
+        <td class="success">{{one.number}}</td>
+        <td class="success">{{one.courseName}}</td>
+        <td class="success">{{one.courseType}}</td>
+        <td class="success">{{one.credit}}</td>
+        <td class="success">{{one.totalGrade}}</td>
+        <td class="success">{{one.makeupGrade}}</td>
+        <td class="success">{{one.finalGrade}}</td>
+        <td class="success">{{one.gradePoint}}</td>
+
+      {% else %}
+        <td class="danger">{{forloop.counter}}</td>
+        <td class="danger">{{one.academisc}}</td>
+        <td class="danger">{{one.semester}}</td>
+        <td class="danger">{{one.number}}</td>
+        <td class="danger">{{one.courseName}}</td>
+        <td class="danger">{{one.courseType}}</td>
+        <td class="danger">{{one.credit}}</td>
+        <td class="danger">{{one.totalGrade}}</td>
+        <td class="danger">{{one.makeupGrade}}</td>
+        <td class="danger">{{one.finalGrade}}</td>
+        <td class="danger">{{one.gradePoint}}</td>
+      {% endif %}
+
+    </tr>
+
+{% endfor %}
+
+
+</table>
+
+
+This is manage page for you to look grade
     <script>
 
     $(document).ready(function() {

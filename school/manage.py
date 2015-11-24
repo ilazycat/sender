@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
-#sudo sysctl fs.inotify.max_user_watches=16384
+#sudo sysctl fs.inotify.max_user_watches=100000
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "school.settings")
 
