@@ -186,19 +186,17 @@ def Userinfo(request, userinfoID):
         return HttpResponseRedirect('/login/')
 
 def AddGrade_Ajax(request, userinfoID = 0):
-    print (userinfoID)
+    # print (userinfoID)
     if request.user.is_authenticated():
         # try:
         user = userinfo.objects.filter(id = userinfoID)[0]
-        li = Exec(user.username, user.password, 'courseList')
-        db = DB_uestc(userinfoID)
-        db.sync(li)
-        result= {'status':'1','message':'sync done'}
-        # except Exception as e:
-        #     result = {'status': '0', 'message': str(e)}
-
-
-
+        if user.verify == True:
+            li = Exec(user.username, user.password, 'courseList')
+            db = DB_uestc(userinfoID)
+            db.sync(li)
+            result= {'status':'1','message':'sync done'}
+        else:
+            result= {'status':'0','message':'Not Verify Account'}
     else:
         result= {'status':'0','message':'You are not login'}
     result = simplejson.dumps(result)

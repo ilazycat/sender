@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ff9b3f7b-7b9b-4381-a06d-b0c3c3735b57" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/grade/functions/AutoCheckGrade.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/grade/functions/SendMail_API.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.ids" afterPath="$PROJECT_DIR$/.idea/dataSources.ids" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grade/functions/Uestc.py" afterPath="$PROJECT_DIR$/grade/functions/Uestc.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grade/functions/Uestc2db.py" afterPath="$PROJECT_DIR$/grade/functions/Uestc2db.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grade/models.py" afterPath="$PROJECT_DIR$/grade/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grade/template/base.html" afterPath="$PROJECT_DIR$/grade/template/base.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grade/template/userinfo.html" afterPath="$PROJECT_DIR$/grade/template/userinfo.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grade/views.py" afterPath="$PROJECT_DIR$/grade/views.py" />
     </list>
@@ -80,7 +80,7 @@
         <entry file="file://$PROJECT_DIR$/grade/functions/Uestc.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="422" column="34" selection-start-line="422" selection-start-column="34" selection-end-line="422" selection-end-column="34" />
+              <caret line="435" column="39" selection-start-line="435" selection-start-column="39" selection-end-line="435" selection-end-column="39" />
               <folding>
                 <element signature="e#44#53#0" expanded="true" />
                 <element signature="e#442#2362#0" expanded="false" />
@@ -94,7 +94,7 @@
         <entry file="file://$PROJECT_DIR$/manage.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
+              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -104,7 +104,7 @@
         <entry file="file://$PROJECT_DIR$/grade/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="173" column="133" selection-start-line="173" selection-start-column="133" selection-end-line="173" selection-end-column="133" />
+              <caret line="191" column="30" selection-start-line="191" selection-start-column="30" selection-end-line="191" selection-end-column="30" />
               <folding>
                 <element signature="e#43#90#0" expanded="true" />
                 <element signature="e#837#1002#0" expanded="false" />
@@ -119,10 +119,10 @@
                 <element signature="e#5295#5353#0" expanded="false" />
                 <element signature="e#5379#5682#0" expanded="false" />
                 <element signature="e#5715#6019#0" expanded="false" />
-                <element signature="e#9230#9868#0" expanded="false" />
-                <element signature="e#10270#10595#0" expanded="false" />
-                <element signature="e#10636#12666#0" expanded="false" />
-                <element signature="e#12709#13022#0" expanded="false" />
+                <element signature="e#9266#9904#0" expanded="false" />
+                <element signature="e#10306#10631#0" expanded="false" />
+                <element signature="e#10672#12702#0" expanded="false" />
+                <element signature="e#12745#13058#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -132,7 +132,7 @@
         <entry file="file://$PROJECT_DIR$/grade/functions/Uestc2db.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="17" column="38" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
+              <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
               <folding>
                 <element signature="e#44#58#0" expanded="true" />
                 <marker date="1448382676463" expanded="true" signature="765:1274" placeholder="insert into missing_value..." />
@@ -148,10 +148,33 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="AutoCheckGrade.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/grade/functions/AutoCheckGrade.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.3809524">
+              <caret line="49" column="19" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+                <marker date="1448470643092" expanded="true" signature="544:557" placeholder="select * fro..." />
+                <marker date="1448470643092" expanded="true" signature="544:558" placeholder="select * fro..." />
+                <marker date="1448470643092" expanded="true" signature="544:578" placeholder="select * fro..grade_grades..." />
+                <marker date="1448470643092" expanded="true" signature="544:582" placeholder="select from ..missing_value..." />
+                <marker date="1448470643092" expanded="true" signature="544:614" placeholder="select * fro..where..." />
+                <marker date="1448470643092" expanded="true" signature="894:1023" placeholder="select from ..missing_value..." />
+                <marker date="1448470643092" expanded="true" signature="1396:1426" placeholder="select email..missing_value..." />
+                <marker date="1448470643092" expanded="true" signature="1652:1666" placeholder="select id fr..." />
+                <marker date="1448470643092" expanded="true" signature="1652:1667" placeholder="select id fr..missing_value..." />
+                <marker date="1448470643092" expanded="true" signature="1652:1687" placeholder="select id fr..missing_value..." />
+                <marker date="1448470643092" expanded="true" signature="2033:2082" placeholder="select usern..missing_value..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grade/template/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.535714">
+            <state vertical-scroll-proportion="0.0">
               <caret line="17" column="16" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="16" />
               <folding />
             </state>
@@ -162,7 +185,7 @@
         <entry file="file://$PROJECT_DIR$/grade/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+              <caret line="38" column="29" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -170,12 +193,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="userinfo.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="userinfo.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grade/template/userinfo.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5311688">
-              <caret line="144" column="8" selection-start-line="144" selection-start-column="8" selection-end-line="144" selection-end-column="8" />
+            <state vertical-scroll-proportion="-32.92857">
+              <caret line="164" column="36" selection-start-line="164" selection-start-column="36" selection-end-line="164" selection-end-column="36" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SendMail_API.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grade/functions/SendMail_API.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -184,8 +219,10 @@
         <entry file="file://$PROJECT_DIR$/school/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
-              <folding />
+              <caret line="30" column="26" selection-start-line="30" selection-start-column="26" selection-end-line="30" selection-end-column="26" />
+              <folding>
+                <element signature="e#616#657#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -220,8 +257,10 @@
         <option value="$PROJECT_DIR$/grade/template/base.html" />
         <option value="$PROJECT_DIR$/grade/functions/Uestc.py" />
         <option value="$PROJECT_DIR$/grade/functions/Uestc2db.py" />
-        <option value="$PROJECT_DIR$/grade/views.py" />
+        <option value="$PROJECT_DIR$/grade/functions/SendMail_API.py" />
         <option value="$PROJECT_DIR$/grade/template/userinfo.html" />
+        <option value="$PROJECT_DIR$/grade/views.py" />
+        <option value="$PROJECT_DIR$/grade/functions/AutoCheckGrade.py" />
       </list>
     </option>
   </component>
@@ -243,12 +282,18 @@
             <id />
           </State>
           <State>
+            <id>CSS</id>
+          </State>
+          <State>
+            <id>Invalid elementsCSS</id>
+          </State>
+          <State>
             <id>Python</id>
           </State>
         </expanded-state>
         <selected-state>
           <State>
-            <id>Buildout</id>
+            <id>CssInvalidPropertyValue</id>
           </State>
         </selected-state>
       </profile-state>
@@ -279,7 +324,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -404,6 +448,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -704,21 +749,21 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32969153" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25578406" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25899744" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288948" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32971016" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288948" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32850242" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288948" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39975846" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -739,44 +784,13 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/grade/template/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grade/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="227" column="0" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
-          <folding>
-            <element signature="e#43#90#0" expanded="true" />
-            <element signature="e#837#1002#0" expanded="false" />
-            <element signature="e#1042#1223#0" expanded="false" />
-            <element signature="e#1257#1447#0" expanded="false" />
-            <element signature="e#1471#1500#0" expanded="false" />
-            <element signature="e#1538#1647#0" expanded="false" />
-            <element signature="e#1687#1891#0" expanded="false" />
-            <element signature="e#1915#2134#0" expanded="false" />
-            <element signature="e#2164#4021#0" expanded="false" />
-            <element signature="e#4049#5266#0" expanded="false" />
-            <element signature="e#5295#5353#0" expanded="false" />
-            <element signature="e#5379#5682#0" expanded="false" />
-            <element signature="e#5715#6019#0" expanded="false" />
-            <element signature="e#9230#9868#0" expanded="false" />
-            <element signature="e#10270#10595#0" expanded="false" />
-            <element signature="e#10636#12666#0" expanded="false" />
-            <element signature="e#12709#13022#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/school/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#616#657#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -833,10 +847,10 @@
             <element signature="e#5295#5353#0" expanded="false" />
             <element signature="e#5379#5682#0" expanded="false" />
             <element signature="e#5715#6019#0" expanded="false" />
-            <element signature="e#9230#9868#0" expanded="false" />
-            <element signature="e#10270#10595#0" expanded="false" />
-            <element signature="e#10636#12666#0" expanded="false" />
-            <element signature="e#12709#13022#0" expanded="false" />
+            <element signature="e#9266#9904#0" expanded="false" />
+            <element signature="e#10306#10631#0" expanded="false" />
+            <element signature="e#10672#12702#0" expanded="false" />
+            <element signature="e#12745#13058#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -901,10 +915,10 @@
             <element signature="e#5295#5353#0" expanded="false" />
             <element signature="e#5379#5682#0" expanded="false" />
             <element signature="e#5715#6019#0" expanded="false" />
-            <element signature="e#9230#9868#0" expanded="false" />
-            <element signature="e#10270#10595#0" expanded="false" />
-            <element signature="e#10636#12666#0" expanded="false" />
-            <element signature="e#12709#13022#0" expanded="false" />
+            <element signature="e#9266#9904#0" expanded="false" />
+            <element signature="e#10306#10631#0" expanded="false" />
+            <element signature="e#10672#12702#0" expanded="false" />
+            <element signature="e#12745#13058#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -913,7 +927,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="35" column="30" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
-          <folding />
+          <folding>
+            <element signature="e#616#657#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -961,10 +977,10 @@
             <element signature="e#5295#5353#0" expanded="false" />
             <element signature="e#5379#5682#0" expanded="false" />
             <element signature="e#5715#6019#0" expanded="false" />
-            <element signature="e#9230#9868#0" expanded="false" />
-            <element signature="e#10270#10595#0" expanded="false" />
-            <element signature="e#10636#12666#0" expanded="false" />
-            <element signature="e#12709#13022#0" expanded="false" />
+            <element signature="e#9266#9904#0" expanded="false" />
+            <element signature="e#10306#10631#0" expanded="false" />
+            <element signature="e#10672#12702#0" expanded="false" />
+            <element signature="e#12745#13058#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1125,7 +1141,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="2156" column="36" selection-start-line="2156" selection-start-column="36" selection-end-line="2156" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1133,7 +1148,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.0">
           <caret line="0" column="26" selection-start-line="0" selection-start-column="26" selection-end-line="0" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1153,10 +1167,56 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/school/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="26" selection-start-line="30" selection-start-column="26" selection-end-line="30" selection-end-column="26" />
+          <folding>
+            <element signature="e#616#657#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grade/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="38" column="29" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grade/template/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="16" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grade/template/userinfo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-32.92857">
+          <caret line="164" column="36" selection-start-line="164" selection-start-column="36" selection-end-line="164" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grade/functions/SendMail_API.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/grade/functions/Uestc2db.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="17" column="38" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
+          <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
           <folding>
             <element signature="e#44#58#0" expanded="true" />
             <marker date="1448382676463" expanded="true" signature="765:1274" placeholder="insert into missing_value..." />
@@ -1171,10 +1231,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/grade/functions/Uestc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="435" column="39" selection-start-line="435" selection-start-column="39" selection-end-line="435" selection-end-column="39" />
+          <folding>
+            <element signature="e#44#53#0" expanded="true" />
+            <element signature="e#442#2362#0" expanded="false" />
+            <marker date="1448381484346" expanded="true" signature="44:210" placeholder="import ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/grade/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="173" column="133" selection-start-line="173" selection-start-column="133" selection-end-line="173" selection-end-column="133" />
+          <caret line="191" column="30" selection-start-line="191" selection-start-column="30" selection-end-line="191" selection-end-column="30" />
           <folding>
             <element signature="e#43#90#0" expanded="true" />
             <element signature="e#837#1002#0" expanded="false" />
@@ -1189,10 +1261,10 @@
             <element signature="e#5295#5353#0" expanded="false" />
             <element signature="e#5379#5682#0" expanded="false" />
             <element signature="e#5715#6019#0" expanded="false" />
-            <element signature="e#9230#9868#0" expanded="false" />
-            <element signature="e#10270#10595#0" expanded="false" />
-            <element signature="e#10636#12666#0" expanded="false" />
-            <element signature="e#12709#13022#0" expanded="false" />
+            <element signature="e#9266#9904#0" expanded="false" />
+            <element signature="e#10306#10631#0" expanded="false" />
+            <element signature="e#10672#12702#0" expanded="false" />
+            <element signature="e#12745#13058#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1200,54 +1272,29 @@
     <entry file="file://$PROJECT_DIR$/manage.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grade/functions/Uestc.py">
+    <entry file="file://$PROJECT_DIR$/grade/functions/AutoCheckGrade.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="422" column="34" selection-start-line="422" selection-start-column="34" selection-end-line="422" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.3809524">
+          <caret line="49" column="19" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
           <folding>
-            <element signature="e#44#53#0" expanded="true" />
-            <element signature="e#442#2362#0" expanded="false" />
-            <marker date="1448381484346" expanded="true" signature="44:210" placeholder="import ..." />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1448470643092" expanded="true" signature="544:557" placeholder="select * fro..." />
+            <marker date="1448470643092" expanded="true" signature="544:558" placeholder="select * fro..." />
+            <marker date="1448470643092" expanded="true" signature="544:578" placeholder="select * fro..grade_grades..." />
+            <marker date="1448470643092" expanded="true" signature="544:582" placeholder="select from ..missing_value..." />
+            <marker date="1448470643092" expanded="true" signature="544:614" placeholder="select * fro..where..." />
+            <marker date="1448470643092" expanded="true" signature="894:1023" placeholder="select from ..missing_value..." />
+            <marker date="1448470643092" expanded="true" signature="1396:1426" placeholder="select email..missing_value..." />
+            <marker date="1448470643092" expanded="true" signature="1652:1666" placeholder="select id fr..." />
+            <marker date="1448470643092" expanded="true" signature="1652:1667" placeholder="select id fr..missing_value..." />
+            <marker date="1448470643092" expanded="true" signature="1652:1687" placeholder="select id fr..missing_value..." />
+            <marker date="1448470643092" expanded="true" signature="2033:2082" placeholder="select usern..missing_value..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grade/template/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.535714">
-          <caret line="17" column="16" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grade/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/school/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grade/template/userinfo.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5311688">
-          <caret line="144" column="8" selection-start-line="144" selection-start-column="8" selection-end-line="144" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>

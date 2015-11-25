@@ -101,32 +101,32 @@ This is view grade
         <td class="warning new_grade">{{one.updateTime}}</td>
     {% else %}
         {% if one.finalGrade > '60' or  one.finalGrade == '100'  %}
-            <td class="success">{{forloop.counter}}</td>
-            <td class="success">{{one.academisc}}</td>
-            <td class="success">{{one.semester}}</td>
-            <td class="success">{{one.number}}</td>
-            <td class="success">{{one.courseName}}</td>
-            <td class="success">{{one.courseType}}</td>
-            <td class="success">{{one.credit}}</td>
-            <td class="success">{{one.totalGrade}}</td>
-            <td class="success">{{one.makeupGrade}}</td>
-            <td class="success">{{one.finalGrade}}</td>
-            <td class="success">{{one.gradePoint}}</td>
-            <td class="success">{{one.updateTime}}</td>
+            <td class="success pass_grade">{{forloop.counter}}</td>
+            <td class="success pass_grade">{{one.academisc}}</td>
+            <td class="success pass_grade">{{one.semester}}</td>
+            <td class="success pass_grade">{{one.number}}</td>
+            <td class="success pass_grade">{{one.courseName}}</td>
+            <td class="success pass_grade">{{one.courseType}}</td>
+            <td class="success pass_grade">{{one.credit}}</td>
+            <td class="success pass_grade">{{one.totalGrade}}</td>
+            <td class="success pass_grade">{{one.makeupGrade}}</td>
+            <td class="success pass_grade">{{one.finalGrade}}</td>
+            <td class="success pass_grade">{{one.gradePoint}}</td>
+            <td class="success pass_grade">{{one.updateTime}}</td>
 
         {% else %}
-            <td class="danger">{{forloop.counter}}</td>
-            <td class="danger">{{one.academisc}}</td>
-            <td class="danger">{{one.semester}}</td>
-            <td class="danger">{{one.number}}</td>
-            <td class="danger">{{one.courseName}}</td>
-            <td class="danger">{{one.courseType}}</td>
-            <td class="danger">{{one.credit}}</td>
-            <td class="danger">{{one.totalGrade}}</td>
-            <td class="danger">{{one.makeupGrade}}</td>
-            <td class="danger">{{one.finalGrade}}</td>
-            <td class="danger">{{one.gradePoint}}</td>
-            <td class="success">{{one.updateTime}}</td>
+            <td class="danger notPass_grade">{{forloop.counter}}</td>
+            <td class="danger notPass_grade">{{one.academisc}}</td>
+            <td class="danger notPass_grade">{{one.semester}}</td>
+            <td class="danger notPass_grade">{{one.number}}</td>
+            <td class="danger notPass_grade">{{one.courseName}}</td>
+            <td class="danger notPass_grade">{{one.courseType}}</td>
+            <td class="danger notPass_grade">{{one.credit}}</td>
+            <td class="danger notPass_grade">{{one.totalGrade}}</td>
+            <td class="danger notPass_grade">{{one.makeupGrade}}</td>
+            <td class="danger notPass_grade">{{one.finalGrade}}</td>
+            <td class="danger notPass_grade">{{one.gradePoint}}</td>
+            <td class="danger notPass_grade">{{one.updateTime}}</td>
         {% endif %}
     {% endif %}
     </tr>
@@ -139,11 +139,34 @@ This is view grade
 
 This is manage page for you to look grade
 
+    <!--suppress CssInvalidPropertyValue -->
     <style type="text/css">
     .new_grade
     {
-        
+        color: hotpink;
+        font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+        font-size: 14;
+        font-weight: bold;
+
     }
+
+    .notPass_grade
+    {
+        color: black;
+        font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+        font-size: 14;
+        font-weight: bold;
+    }
+
+
+    .pass_grade
+    {
+        color: #6fb1ff;
+        font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+        font-size: 14;
+{#        font-weight: bold;#}
+    }
+
     </style>
     <script>
 
