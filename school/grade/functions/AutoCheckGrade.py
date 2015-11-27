@@ -134,12 +134,12 @@ if __name__ == '__main__':
         exit(0)
     if (options.way == 'shell'):
         while(True):
-            Sender(options.school, options.time)
-            time.sleep(int(options.time) * 60)
+            Sender(options.school, int(options.time))
             print ('sleep @ '+ datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            time.sleep(int(options.time) * 60)
     elif (options.way == 'crontab'):
-        Sender(options.school, options.time)
-        print ('done @ '+ datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))            
+        Sender(options.school, int(options.time))
+        print ('done @ '+ datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     else:
         parser.print_help()
     exit(0)
@@ -153,3 +153,4 @@ if __name__ == '__main__':
     #     t.start()
     # while (1):
     #     continue
+    
