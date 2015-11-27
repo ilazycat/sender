@@ -7,6 +7,7 @@ import re
 import time
 import threading
 import simplejson
+from optparse import OptionParser
 class DB:
     def __init__(self, db = '../../data.db'):
         self.cx = sqlite3.connect(db)
@@ -80,49 +81,70 @@ def Convert2Text(one):
     return result
 
 
-def Sender(school = 'uestc', minutes = 10, database = '../../data.db'):
+def Sender(school = 'uestc', database = '../../data.db'):
     db = DB(database)
     users = db.getUsersBySchool(school)
-    while(True):
-        for userID in users:   # users: all user from uestc list, @ userInfo-->
-            userInfo = db.getUsernameAndPasswordByID(userID)
-            if (userInfo['verify'] == True):
-                try:
-                    li = Exec(userInfo['username'], userInfo['password'], 'courseList')
-                    if (li == 'Authentication failed'):
-                        cx = sqlite3.connect(database)
-                        cu = cx.cursor()
-                        sql = ("update grade_userinfo set verify=0  where school='%s' and username='%s';" % ('uestc', username))
-                        cu.execute(sql)
-                        cx.commit()
-                        continue
-                    # print (li)
-                    DB_uestc(userID, database).sync(li)
-                    email = db.getEmailByID(userID)
-                    content = db.getNewUestcByID(userID, minutes)
-                    # print (content)
-                    # print (len(content))
-                    # exit(0)
+    # while(True):
+    for userID in users:   # users: all user from uestc list, @ userInfo-->
+        userInfo = db.getUsernameAndPasswordByID(userID)
+        if (userInfo['verify'] == True):
+            try:
+                li = Exec(userInfo['username'], userInfo['password'], 'courseList')
+                if (li == 'Authentication failed'):
+                    cx = sqlite3.connect(database)
+                    cu = cx.cursor()
+                    sql = ("update grade_userinfo set verify=0  where school='%s' and username='%s';" % ('uestc', username))
+                    cu.execute(sql)
+                    cx.commit()
+                    continue
+                # print (li)
+                DB_uestc(userID, database).sync(li)
+                email = db.getEmailByID(userID)
+                content = db.getNewUestcByID(userID, minutes)
+                # print (content)
+                # print (len(content))
+                # exit(0)
 
-                    if (len(content) > 0):
-                        print (content)
-                        print ('send to '+','.join(email) + ' -->' + userInfo['username'] + ' @ ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-                        SendMail('Grades', content, email)
-                    else:
-                        print ('No update for ' + userInfo['username'] + ' @ ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-                except Exception as e:
-                    print ('-------ERROR-------')
-                    print (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-                    print ('school:' + school + ' username:' + userInfo['username'] + ' verify:' + str(userInfo['verify']))
-                    print (e)
-                    print ('-------_END_-------')
-        print ('sleep @ '+ datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-        time.sleep(minutes * 60)
+                if (len(content) > 0):
+                    print (content)
+                    print ('send to '+','.join(email) + ' -->' + userInfo['username'] + ' @ ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                    SendMail('Grades', content, email)
+                else:
+                    print ('No update for ' + userInfo['username'] + ' @ ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            except Exception as e:
+                print ('-------ERROR-------')
+                print (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                print ('school:' + school + ' username:' + userInfo['username'] + ' verify:' + str(userInfo['verify']))
+                print (e)
+                print ('-------_END_-------')
+        # print ('sleep @ '+ datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        # time.sleep(minutes * 60)
 
 
 
 if __name__ == '__main__':
-    Sender('uestc',10)
+    usage = "usage: %prog [options] arg"
+    parser = OptionParser()
+    parser.add_option('-s', '--school', help = 'Your school')
+    parser.add_option('-t', '--time', help = 'Time for onetime')
+    parser.add_option('-w', '--way', help = '1.: shell.  2.crontab.')
+    (options, args) = parser.parse_args()
+    if (options.school == None or options.time == None or options.way == None):
+        parser.print_help()
+        exit(0)
+    if (options.way == 'shell'):
+        while(True):
+            Sender(options.school)
+            time.sleep(int(options.time) * 60)
+            print ('sleep @ '+ datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    elif (options.way == 'crontab'):
+        Sender(options.school)
+        print ('done @ '+ datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))            
+    else:
+        parser.print_help()
+    exit(0)
+
+    # Sender('uestc',10)
     # threads = []
     # t1 = threading.Thread(target = Sender, args = ('uestc', 1))
     # threads.append(t1)
