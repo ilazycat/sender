@@ -1,6 +1,5 @@
 import smtplib
 from email.mime.text import MIMEText
-import re
 import datetime
 class SendMail:
     #5YceTh1Nxf
@@ -16,9 +15,9 @@ class SendMail:
 
 
         if self.sendMail(self.mailTo, self.sub, self.content):
-            print (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            print ('send success @ ' + ','.join(mailTo) + ' ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         else:
-            print (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            print ('send faild ' + ','.join(mailTo) +' ' +datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 
     def sendMail(self,to_list, sub, content):
@@ -32,7 +31,7 @@ class SendMail:
             server.connect(self.mailHost)
             server.login(self.mailUser,self.mailPass)
             server.sendmail(me, to_list, msg.as_string())
-            print (to_list)
+            # print (to_list)
             server.close()
             return True
         except Exception as e:

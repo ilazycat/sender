@@ -5,9 +5,10 @@ from Uestc2db import DB_uestc
 import datetime
 import re
 import time
+import threading
 import simplejson
 class DB:
-    def __init__(self, db = 'data.db'):
+    def __init__(self, db = '../../data.db'):
         self.cx = sqlite3.connect(db)
         self.cu = self.cx.cursor()
         self.Grade_Grades = 'grade_grades'
@@ -24,13 +25,15 @@ class DB:
         self.cu.execute(sql)
 
         response = self.cu.fetchall()
+
         result = []
         for one in response:
             # print (one)
             # result.append(Convert2JSON(one))
             result.append(Convert2Text(one))
+        print ('-----------\n'.join(result))
         return '-----------\n'.join(result)
-    def getEmail(self, userID):
+    def getEmailByID(self, userID):
         sql = ("select email from %s where id=%d" % (self.Grade_Userinfo, int(userID)))
         self.cu.execute(sql)
         response = self.cu.fetchone()
@@ -47,7 +50,11 @@ class DB:
         # return re.split(',| ', response[0])
     def getUsernameAndPasswordByID(self, userID):
         sql = ("select username,password,verify from %s where id=%d" % (self.Grade_Userinfo, userID))
-        #TODO: HERE
+        self.cu.execute(sql)
+        response = self.cu.fetchone()
+        return {'username':response[0],
+                'password':response[1],
+                'verify':response[2]}
 
 def Convert2JSON(one):
     json = {'courseName':str(one[0]),
@@ -72,22 +79,55 @@ def Convert2Text(one):
     result = result + 'updateTime:'+str(one[6])+'\n'
     return result
 
-if __name__ == '__main__':
+
+def Sender(school = 'uestc', minutes = 10, database = '../../data.db'):
+    db = DB(database)
+    users = db.getUsersBySchool(school)
     while(True):
-        # main()
-        pass
-def Sender():
-    db = DB('../../data.db')
-    user = db.getUsersBySchool('uestc')
-    for one in user:
-        email = db.getEmail(one)
-        content = db.getNewUestcByID(one,100000)
+        for userID in users:   # users: all user from uestc list, @ userInfo-->
+            userInfo = db.getUsernameAndPasswordByID(userID)
+            if (userInfo['verify'] == True):
+                try:
+                    li = Exec(userInfo['username'], userInfo['password'], 'courseList')
+                    if (li == 'Authentication failed'):
+                        cx = sqlite3.connect(database)
+                        cu = cx.cursor()
+                        sql = ("update grade_userinfo set verify=0  where school='%s' and username='%s';" % ('uestc', username))
+                        cu.execute(sql)
+                        cx.commit()
+                        continue
+                    # print (li)
+                    DB_uestc(userID, database).sync(li)
+                    email = db.getEmailByID(userID)
+                    content = db.getNewUestcByID(userID, minutes)
+                    # print (content)
+                    # print (len(content))
+                    # exit(0)
 
-        if (len(content) > 0):
-            SendMail('Grades', content, email)
+                    if (len(content) > 0):
+                        print (content)
+                        print ('send to '+','.join(email) + ' -->' + userInfo['username'] + ' @ ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                        SendMail('Grades', content, email)
+                    else:
+                        print ('No update for ' + userInfo['username'] + ' @ ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                except Exception as e:
+                    print ('-------ERROR-------')
+                    print (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                    print ('school:' + school + ' username:' + userInfo['username'] + ' verify:' + str(userInfo['verify']))
+                    print (e)
+                    print ('-------_END_-------')
+        print ('sleep @ '+ datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        time.sleep(minutes * 60)
 
-def Checker():
-    user = userinfo.objects.filter(id = userinfoID)[0]
-    li = Exec(user.username, user.password, 'courseList')
-    db = DB_uestc(userinfoID)
-    db.sync(li)
+
+
+if __name__ == '__main__':
+    Sender('uestc',10)
+    # threads = []
+    # t1 = threading.Thread(target = Sender, args = ('uestc', 1))
+    # threads.append(t1)
+    # for t in threads:
+    #     t.setDaemon(True)
+    #     t.start()
+    # while (1):
+    #     continue

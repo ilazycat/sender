@@ -9,6 +9,7 @@ from optparse import OptionParser
 import http.cookiejar
 from urllib.parse import urlencode
 import time
+import sqlite3
 
 
 def judgeExistMakeupGrade(gradeList):   #into is tempA, no u'',
@@ -109,7 +110,7 @@ class Coursestruct:
         try:
             course[2] = course[2].encode('ascii')
         except:
-            course.insert(2,'###########'.encode('ascii'))
+            course.insert(2,course[1].decode().encode('ascii'))
             adjuster = adjuster - 1      # if init course[2] is NULL,there can't encode as 'ascii'
 
         self.courseNumber.append(course[2])
@@ -217,9 +218,22 @@ class GradeAnalyzer:
 
     def printTotal(self):
 
-
+        # print (self.soup)
         self.griddata_even = self.soup.select(".griddata-even")
         self.griddata_odd  = self.soup.select(".griddata-odd")
+        # print (self.griddata_odd)
+        # print (self.griddata_even)
+        #
+        # print (len(self.griddata_odd))
+        # print (len(self.griddata_even))
+        #
+        # print ()
+        # print ()
+        # print (self.griddata_even[len(self.griddata_odd)-1].get_text().encode('ascii','ignore').decode().strip('\n').strip(':').split('\n'))
+
+        # print (self.griddata_odd[len(self.griddata_odd)-1].get_text().encode('ascii','ignore').strip('\n').split('\n'))
+        # print (self.griddata_even[len(self.griddata_even)-1].get_text().encode('ascii','ignore').strip('\n').strip(':').split('\n'))
+        # exit(0)
         self.griddata = []
         for i in range(0, len(self.griddata_even) - 1, 1):
             self.griddata.append(self.griddata_even[i].get_text())
@@ -233,6 +247,9 @@ class GradeAnalyzer:
         self.termData.printAll()
 
         self.griddata = []
+
+
+
         if (len(self.griddata_even) > len(self.griddata_odd)):
             ### 1,3,5,7 term
             self.griddata.append(self.griddata_odd[-1].get_text().encode('ascii','ignore').strip('\n').split('\n'))
@@ -407,8 +424,17 @@ class uestc():
             return result.read().decode()
 
 
+def setFalseVerify(username):
+    cx = sqlite3.connect('data.db')
+    cu = cx.cursor()
+    sql = ("update grade_userinfo set verify=0  where school='%s' and username='%s';" % ('uestc', username))
+    cu.execute(sql)
+    cx.commit()
+
 def check(username,password):
     user = uestc(username, password)
+    # if (user != True):
+        # setFalseVerify(username)
     return user.getStatus()
 
 def getRawCourse(username,password):
@@ -416,6 +442,7 @@ def getRawCourse(username,password):
     if (user.getStatus() == True):
         return user.getMyGrade()
     else:
+        # setFalseVerify(username)
         return 'Authentication failed'
 
 def getCourseList(username,password):
@@ -425,6 +452,7 @@ def getCourseList(username,password):
         grade.printTotal()
         return grade.printCourses()
     else:
+        # setFalseVerify(username)
         return 'Authentication failed'
 
 

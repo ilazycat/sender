@@ -6,8 +6,8 @@ import datetime
 
 
 class DB_uestc:
-    def __init__(self, belongs_id):
-        self.cx = sqlite3.connect('data.db')
+    def __init__(self, belongs_id, db = 'data.db'):
+        self.cx = sqlite3.connect(db)
         self.cu = self.cx.cursor()
         self.table = 'grade_grades'
         self.belongs_id = belongs_id
