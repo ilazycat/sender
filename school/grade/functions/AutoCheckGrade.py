@@ -81,7 +81,7 @@ def Convert2Text(one):
     return result
 
 
-def Sender(school = 'uestc', database = '../../data.db'):
+def Sender(school = 'uestc', minutes = 10, database = '../../data.db'):
     db = DB(database)
     users = db.getUsersBySchool(school)
     # while(True):
@@ -134,11 +134,11 @@ if __name__ == '__main__':
         exit(0)
     if (options.way == 'shell'):
         while(True):
-            Sender(options.school)
+            Sender(options.school, options.time)
             time.sleep(int(options.time) * 60)
             print ('sleep @ '+ datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     elif (options.way == 'crontab'):
-        Sender(options.school)
+        Sender(options.school, options.time)
         print ('done @ '+ datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))            
     else:
         parser.print_help()
