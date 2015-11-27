@@ -270,12 +270,15 @@ def VerifyFull_Ajax(request):
 def verifyFull(belongs_id = 0):
     #this is verify by login_user,not decided by post
     users = userinfo.objects.filter(belongs_id = belongs_id)
+    result = []
     for user in users:
+        # print (user)
         if user.verify:
-            return True
+            result.append(True)
         else:
             # print ('verify:'+user.username)
-            return verifyOne(belongs_id, user.username, user.password, user.school)
+            result.append(verifyOne(belongs_id, user.username, user.password, user.school))
+    return result
 
 
 

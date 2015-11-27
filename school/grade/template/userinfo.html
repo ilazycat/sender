@@ -37,7 +37,7 @@ This is view grade
       <td class="success">None</td>
     {% endif %}
     <td class="success">{{one.verify}}</td>
-    <td class="success"><a href='javascript:deleteUser({{ one.id }})'>delete</a></td>
+    <td class="success"><a href='javascript:sync()'>sync</a></td>
   {% else %}
     <td class="danger">{{one.id}}</td>
     <td class="danger">{{one.school}}</td>
@@ -60,7 +60,8 @@ This is view grade
 
 
 </table>
-<hr/>
+<hr/><hr/>
+
 
 <table id="grade" class="table table-hover table-bordered display" cellspacing="0">
 <thead>
@@ -177,6 +178,16 @@ This is manage page for you to look grade
         } );
     } );
 
+
+    function sync()
+    {
+        alert ('start sync, please wait');
+        $.get("sync", function (data, status) {
+{#            alert (status);#}
+{#            alert(data);#}
+            window.location.reload();
+        })
+    }
 
 
     function deleteUser(userinfoID)
