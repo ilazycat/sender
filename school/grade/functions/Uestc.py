@@ -9,6 +9,7 @@ from optparse import OptionParser
 import http.cookiejar
 from urllib.parse import urlencode
 import time
+import lxml
 import sqlite3
 
 
@@ -205,7 +206,7 @@ class Coursestruct:
 class GradeAnalyzer:
 
     def __init__(self,html):
-        self.soup = BeautifulSoup(html)
+        self.soup = BeautifulSoup(html, 'lxml')
 
         '''
             griddata-even + griddata-odd 交叉排列
