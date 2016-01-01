@@ -409,7 +409,7 @@ class uestc():
         # This is verify mode
         WA = re.findall(u'您提供的用户名或者密码有误',result)
         # WA = False
-        AC = re.findall(u'<li>欢迎您：',result)
+        AC = re.findall(u'href="http://eams.uestc.edu.cn/eams/"><b>教务系统',result)
 
         if WA or not AC:
             self.status = 'Username or Password wrong'
