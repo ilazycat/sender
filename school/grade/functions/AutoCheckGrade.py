@@ -41,6 +41,20 @@ class DB:
             result.append(Convert2Text(one))
         print ('-----------\n'.join(result))
         return '-----------\n'.join(result)
+    # def getNewUestcByID(self, belongs_id = 0, minutes = 10):
+    #     timeStr = ((datetime.datetime.now() - datetime.timedelta(minutes = minutes)).strftime('%Y-%m-%d %H:%M:%S'))
+    #     sql = ("select courseName,courseType,credit,totalGrade,finalGrade,gradePoint,updateTime from %s where belongs_id='%s' and updateTime>'%s'" % (self.Grade_Grades, belongs_id, timeStr))
+    #     self.cu.execute(sql)
+
+    #     response = self.cu.fetchall()
+
+    #     result = []
+    #     for one in response:
+    #         # print (one)
+    #         # result.append(Convert2JSON(one))
+    #         result.append(Convert2Text(one))
+    #     print ('-----------\n'.join(result))
+    #     return '-----------\n'.join(result)
     def getEmailByID(self, userID):
         sql = ("select email from %s where id=%d" % (self.Grade_Userinfo, int(userID)))
         self.cu.execute(sql)
