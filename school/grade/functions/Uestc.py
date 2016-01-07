@@ -124,9 +124,9 @@ class Coursestruct:
         self.courseNumber.append(course[2])
         self.courseName.append(course[3])
 
-        self.courseType.append(course[4][:-2])
+        self.courseType.append(course[4].split(' ')[0])
 
-        self.courseCredit.append(course[4][-1])
+        self.courseCredit.append(course[4].split(' ')[1])
         # print (course[4][-1])
 
 
