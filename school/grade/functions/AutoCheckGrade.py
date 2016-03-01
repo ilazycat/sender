@@ -20,20 +20,41 @@ class DB:
         self.cu.execute(sql)
         # print (sql)
         return self.cu.fetchall()
+    def getUsername(self, belongs_id = 0):
+        if (belongs_id <= 0):
+            return None
+        sql = ("select username from %s where id=%d" % (self.Grade_Userinfo, belongs_id))
+        self.cu.execute(sql)
+        response = self.cu.fetchall()
+        return response[0][0]
+
     def getNewUestcByID(self, belongs_id = 0, minutes = 10):
         timeStr = ((datetime.datetime.now() - datetime.timedelta(minutes = minutes)).strftime('%Y-%m-%d %H:%M:%S'))
         sql = ("select courseName,courseType,credit,totalGrade,finalGrade,gradePoint,updateTime from %s where belongs_id='%s' and updateTime>'%s'" % (self.Grade_Grades, belongs_id, timeStr))
         self.cu.execute(sql)
-
         response = self.cu.fetchall()
-
         result = []
+        result.append('Username:' + str(self.getUsername(belongs_id)) + '\n')
         for one in response:
             # print (one)
             # result.append(Convert2JSON(one))
             result.append(Convert2Text(one))
         print ('-----------\n'.join(result))
         return '-----------\n'.join(result)
+    # def getNewUestcByID(self, belongs_id = 0, minutes = 10):
+    #     timeStr = ((datetime.datetime.now() - datetime.timedelta(minutes = minutes)).strftime('%Y-%m-%d %H:%M:%S'))
+    #     sql = ("select courseName,courseType,credit,totalGrade,finalGrade,gradePoint,updateTime from %s where belongs_id='%s' and updateTime>'%s'" % (self.Grade_Grades, belongs_id, timeStr))
+    #     self.cu.execute(sql)
+
+    #     response = self.cu.fetchall()
+
+    #     result = []
+    #     for one in response:
+    #         # print (one)
+    #         # result.append(Convert2JSON(one))
+    #         result.append(Convert2Text(one))
+    #     print ('-----------\n'.join(result))
+    #     return '-----------\n'.join(result)
     def getEmailByID(self, userID):
         sql = ("select email from %s where id=%d" % (self.Grade_Userinfo, int(userID)))
         self.cu.execute(sql)

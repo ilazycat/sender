@@ -39,12 +39,16 @@ class TermStruct:
         self.__length__ += 1
 
     def addList(self,list):
+        # print ('----in addList----')
+        # print (list)
+
         self.academicYear.append(list[0])
         self.term.append(list[1])
         self.numberOfCourses.append(list[2])
         self.totalCredit.append(list[3])
         self.gpa.append(list[4])
         self.__length__ += 1
+        # print ('----out addList----')
 
     def addFinal(self,allGPA,time):
         self.all = allGPA
@@ -67,11 +71,14 @@ class TermStruct:
         #     print (self.gpa[i])
 
     def printFinal(self):
+        pass
+        # print ('---- in printFinal ----')
         # print (u"总课程数:",self.all[0],end=' ')
         # print (u"总学分:",self.all[1],end=' ')
         # print (u"总评绩点:",self.all[2])
-        # # print (u"统计时间:",self.time[0])
-        pass
+        # print (u"统计时间:",self.time[0])
+        # print ('---- out printFinal ----')
+        # pass
 
     def getTerm(self, number):
         return ([self.academicYear[number], self.term[number], self.numberOfCourses[number],
@@ -117,9 +124,9 @@ class Coursestruct:
         self.courseNumber.append(course[2])
         self.courseName.append(course[3])
 
-        self.courseType.append(course[4][:-2])
+        self.courseType.append(course[4].split(' ')[0])
 
-        self.courseCredit.append(course[4][-1])
+        self.courseCredit.append(course[4].split(' ')[1])
         # print (course[4][-1])
 
 
@@ -222,6 +229,12 @@ class GradeAnalyzer:
         # print (self.soup)
         self.griddata_even = self.soup.select(".griddata-even")
         self.griddata_odd  = self.soup.select(".griddata-odd")
+        # print ('------even-------')
+        # print (self.griddata_even)
+        # print ('------odd-------')
+        # print (self.griddata_odd)
+        # print ('------end-------')
+        # exit(0)
         # print (self.griddata_odd)
         # print (self.griddata_even)
         #
@@ -236,28 +249,47 @@ class GradeAnalyzer:
         # print (self.griddata_even[len(self.griddata_even)-1].get_text().encode('ascii','ignore').strip('\n').strip(':').split('\n'))
         # exit(0)
         self.griddata = []
-        for i in range(0, len(self.griddata_even) - 1, 1):
+        ### add griddata, this is summary
+        for i in range(0, len(self.griddata_even), 1):
             self.griddata.append(self.griddata_even[i].get_text())
-            for j in range(0, len(self.griddata_odd) - 1, 1):
-                self.griddata.append(self.griddata_odd[i].get_text())
+        for j in range(0, len(self.griddata_odd), 1):
+            # print (self.griddata_odd[i].get_text())
+            self.griddata.append(self.griddata_odd[j].get_text())
+
+
 
         for i in range(0,len(self.griddata), 1):
             self.griddata[i] = self.griddata[i].strip('\n').split('\n')
+            # print (self.griddata[i])
+            if (len(self.griddata[i]) < 5):
+                continue
             self.termData.addList(self.griddata[i])
 
-        self.termData.printAll()
+        # for i in range(0, len(self.griddata), 1):
+        #     print ('-------' , i)
+        #     print (self.griddata[i])
 
+        # exit(0)
+
+        self.termData.printAll()
+        # exit(0)
         self.griddata = []
 
 
-
+        # print (len(self.griddata_even),len(self.griddata_odd))
+        # print (self.griddata_even)
+        # print ('--------')
+        # print (self.griddata_odd)
         if (len(self.griddata_even) > len(self.griddata_odd)):
             ### 1,3,5,7 term
-            self.griddata.append(self.griddata_odd[-1].get_text().encode('ascii','ignore').strip('\n').split('\n'))
-            self.griddata.append(self.griddata_even[-1].get_text().encode('ascii','ignore').strip('\n').strip(':').split('\n'))
+            # print ('----even----')
+            # print (self.griddata)
+            # print (self.griddata_odd[-1].get_text().encode('ascii','ignore').decode().strip('\n').split('\n'))
+            self.griddata.append(self.griddata_odd[-1].get_text().encode('ascii','ignore').decode().strip('\n').split('\n'))
+            self.griddata.append(self.griddata_even[-1].get_text().encode('ascii','ignore').decode().strip('\n').strip(':').split('\n'))
         else:
             ### 2,4,6,8 term
-            # print (self.griddata_even[-1].get_text().encode('ascii','ignore').decode())
+            # print ('----odd----')
             self.griddata.append(self.griddata_even[-1].get_text().encode('ascii','ignore').decode().strip().split())
             self.griddata.append(self.griddata_odd[-1].get_text().encode('ascii','ignore').decode().strip('\n').strip(':').split('\n'))
 
@@ -377,7 +409,7 @@ class uestc():
         # This is verify mode
         WA = re.findall(u'您提供的用户名或者密码有误',result)
         # WA = False
-        AC = re.findall(u'<li>欢迎您：',result)
+        AC = re.findall(u'href="http://eams.uestc.edu.cn/eams/"><b>教务系统',result)
 
         if WA or not AC:
             self.status = 'Username or Password wrong'
