@@ -192,7 +192,7 @@ def AddGrade_Ajax(request, userinfoID = 0):
         user = userinfo.objects.filter(id = userinfoID)[0]
         if user.verify == True:
             li = Exec(user.username, user.password, 'courseList')
-            db = DB_uestc(userinfoID)
+            db = DB_uestc(userinfoID, '/home/lc4t/web_py/school/data.db')
             db.sync(li)
             result= {'status':'1','message':'sync done'}
         else:

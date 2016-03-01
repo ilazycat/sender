@@ -10,7 +10,7 @@ class userinfo(models.Model):
     username        = models.CharField(max_length = 25) # belong to web_username
     name            = models.TextField(null = True)
     password        = models.CharField(max_length = 25 )
-    email           = models.EmailField()
+    email           = models.CharField(max_length = 255, null=True) #models.EmailField()
     school          = models.TextField()
     verify          = models.BooleanField() # is verify success
     updateTime      = models.TimeField(auto_now = True)

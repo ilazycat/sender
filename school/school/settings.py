@@ -16,7 +16,8 @@ import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # sys.path.append('/home/lc4t/Documents/git/web_py/school/grade/functions/')
-sys.path.append(os.getcwd()+'/grade/functions/')
+#sys.path.append(os.getcwd()+'/grade/functions/')
+sys.path.append('/home/lc4t/web_py/school/grade/functions/')
 # sys.path.append(os.getcwd()+'/grade/template/')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -25,9 +26,9 @@ sys.path.append(os.getcwd()+'/grade/functions/')
 SECRET_KEY = 'm5uj8fw_$c9+y33(y74^ssep@p#336z6ug)tx)&+f21%=%6yt7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -63,7 +64,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # 'DIRS': ['/home/lc4t/Documents/git/web_py/school/grade/template'],
-        'DIRS': [os.getcwd()+'/grade/template/'],
+        'DIRS':['/home/lc4t/web_py/school/grade/template/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -110,7 +111,7 @@ STATIC_URL = '/static/'
 STATICFILES_URLS = (
     os.path.join(BASE_DIR, "static"),
     # '/home/lc4t/Documents/git/web_py/school/school/static/',
-    os.getcwd()+'/school/static/',
+    '/home/lc4t/web_py/school/static/',
 
 )
 

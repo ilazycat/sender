@@ -3,7 +3,7 @@ from email.mime.text import MIMEText
 import datetime
 class SendMail:
     #5YceTh1Nxf
-    def __init__(self,sub = 'sub', content = 'content', mailTo = ['lpylzx1@qq.com'], mailHost = 'smtp.ym.163.com',mailUser = 'robot@lc4t.me', mailPassword = '5YceTh1Nxf', mailPosfix = 'lc4t.me'):
+    def __init__(self,sub = 'sub', content = 'content', mailTo = ['lpylzx1@qq.com'], mailHost = 'smtp.ym.163.com',mailUser = 'robot@lc4t.me', mailPassword = '', mailPosfix = 'lc4t.me'):
 
         self.sub = sub # subject
         self.content = content
