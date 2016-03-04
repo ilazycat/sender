@@ -425,7 +425,7 @@ def queryKuaidi(num):
     ans['message'] = result['message']
     try:
         ans['data'] = result['data']
-        ans['updateTime'] = result['data'][0]['time']
+        ans['updateTime'] = result['updateTime']
         ans['verify'] = 1
     except:
         ans['verify'] = 0   # find company, no data
