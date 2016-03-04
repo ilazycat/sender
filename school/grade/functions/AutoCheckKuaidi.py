@@ -59,7 +59,7 @@ class DB:
         ans['message'] = result['message']
         try:
             ans['data'] = result['data']
-            ans['updateTime'] = result['data'][0]['time']
+            ans['updateTime'] = result['data'][0]['ftime']
             ans['verify'] = 1
         except:
             ans['verify'] = 0   # find company, no data
@@ -86,7 +86,7 @@ class DB:
         # ans = latest['data'][-1]
         for i in range(len(latest['data']) - 1, 0 - 1, -1):
             newData = latest['data'][i]
-            if (newData['time'] > oldTime):
+            if (newData['time'] > str(oldTime)):
                 sql = ("insert into %s (belongs_id, num, company, time, context, comment) values ((select (select distinct belongs_id from %s where num='%s')), '%s', '%s', '%s', '%s', (select (select distinct comment from %s where num='%s')));" % (self.table, self.table, num, num, company, newData['time'], newData['context'], self.table, num, ))
                 self.cu.execute(sql)
                 self.cx.commit()
@@ -96,7 +96,11 @@ class DB:
 
         sql = ("select context from %s where num='%s' and time='%s';" % (self.table, num, latest['updateTime']))
         self.cu.execute(sql)
-        ans = self.cu.fetchall()[0][0]
+        try:
+            ans = self.cu.fetchall()[0][0]
+        except Exception as e:
+            print (e)
+            ans = ''
         ans = {'time':latest['updateTime'], 'context':ans}
         return ans
     def getCommentById(self, num):
@@ -145,7 +149,8 @@ class Refresh:
         nums = db.getNumById(int(self.belongs_id))
         count = 0
         for num in nums:
-            if (len(db.checkUpdate(num)) > 0):
+            ans = db.checkUpdate(num)
+            if (ans != None and len(ans) > 0):
                 count += 1
         return count
                 

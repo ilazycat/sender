@@ -425,7 +425,8 @@ def queryKuaidi(num):
     ans['message'] = result['message']
     try:
         ans['data'] = result['data']
-        ans['updateTime'] = result['updateTime']
+        ans['updateTime'] = result['data'][0]['ftime']
+
         ans['verify'] = 1
     except:
         ans['verify'] = 0   # find company, no data
@@ -447,7 +448,6 @@ def kuaidiDelete(request, ID):
     if not request.user.is_authenticated(): # user is login
         return HttpResponseRedirect('/login/')
     else:
-        print (11111)
         kuaidiInfo.objects.filter(id = ID).delete()
         result= {'status':'0', 'message':'delete ' + ID}
         result = simplejson.dumps(result)
