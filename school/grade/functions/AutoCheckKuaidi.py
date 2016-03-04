@@ -75,7 +75,7 @@ class DB:
         # cx = sqlite3.connect(db)
         # cu = cx.cursor()
         # table = 'grade_kuaidiinfo'
-        sql = ("select distinct updatetime from %s where num='%s'" % (self.table, '3903270166431'))
+        sql = ("select distinct updatetime from %s where num='%s'" % (self.table, num))
         self.cu.execute(sql)
         response = self.cu.fetchall()
         if (len(response) != 1):
@@ -87,10 +87,10 @@ class DB:
         for i in range(len(latest['data']) - 1, 0 - 1, -1):
             newData = latest['data'][i]
             if (newData['time'] > oldTime):
-                sql = ("insert into %s (belongs_id, num, company, time, context, comment) values ((select (select distinct belongs_id from %s where num='%s')), '%s', '%s', '%s', '%s', (select (select distinct comment from %s where num='%s')));" % (self.table, self.table, num, num, company, newData['time'], newData['context'], self.table, self.num, ))
+                sql = ("insert into %s (belongs_id, num, company, time, context, comment) values ((select (select distinct belongs_id from %s where num='%s')), '%s', '%s', '%s', '%s', (select (select distinct comment from %s where num='%s')));" % (self.table, self.table, num, num, company, newData['time'], newData['context'], self.table, num, ))
                 self.cu.execute(sql)
                 self.cx.commit()
-        sql = ("update %s set updatetime='%s'  where num='%s'" % (self.table, latest['updateTime'], self.num))
+        sql = ("update %s set updatetime='%s'  where num='%s'" % (self.table, latest['updateTime'], num))
         self.cu.execute(sql)
         self.cx.commit()
         return ans
@@ -132,11 +132,15 @@ class DB:
 
 class Refresh:
     def __init__(self, belongs_id):
-        db = DB(database)
-        nums = db.getNumById(int(belongs_id))
+        self.belongs_id = belongs_id
+        self.Run()
+
+    def Run(self):
+        db = DB('data.db')
+        nums = db.getNumById(int(self.belongs_id))
         count = 0
         for num in nums:
-            if (len(db.checkUpdate(num) > 0)):
+            if (len(db.checkUpdate(num)) > 0):
                 count += 1
         return count
                 
@@ -157,7 +161,7 @@ def Sender(minutes = 3, database = '../../data.db', mode = 'email'):
                 if (mode == 'email'):
                     print (content)
                     print ('send to '+','.join(email) + ' -->' +  ' @ ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-                    SendMail('Grades', content, email)
+                    SendMail('Kuaidi', content, email)
             except Exception as e:
                 print ('-------ERROR-------')
                 print (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
