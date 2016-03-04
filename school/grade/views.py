@@ -5,17 +5,19 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 import datetime
 import re
+import os
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from grade.models import grades,userinfo,information
+from grade.models import grades,userinfo,information,kuaidiInfo
 from django import forms
 from django.contrib.auth.models import User # 创建用户
 from captcha.fields import CaptchaField
 from captcha.models import CaptchaStore
 import subprocess
 from Uestc import Exec
+from AutoCheckKuaidi import Refresh
 from Uestc2db import DB_uestc
 import simplejson
 class CaptchaTestForm(forms.Form):
@@ -23,7 +25,7 @@ class CaptchaTestForm(forms.Form):
 
 def filterUsername(raw_username):
     # special permit map: _
-    username = re.findall(r'^[a-zA-Z0-9_-]{5,18}$',raw_username)
+    username = re.findall(r'^[a-zA-Z0-9_-]{4,18}$',raw_username)
     if (username):
         return username[0]
     else:
@@ -185,14 +187,14 @@ def Userinfo(request, userinfoID):
     else:
         return HttpResponseRedirect('/login/')
 
-def AddGrade_Ajax(request, userinfoID = 0):
+def userInfoAddGrade_Ajax(request, userinfoID = 0):
     # print (userinfoID)
     if request.user.is_authenticated():
         # try:
         user = userinfo.objects.filter(id = userinfoID)[0]
         if user.verify == True:
             li = Exec(user.username, user.password, 'courseList')
-            db = DB_uestc(userinfoID, '/home/lc4t/web_py/school/data.db')
+            db = DB_uestc(userinfoID, os.getcwd() + '/data.db')
             db.sync(li)
             result= {'status':'1','message':'sync done'}
         else:
@@ -212,6 +214,9 @@ def Add(request):   #add an account for manage
     if not request.user.is_authenticated(): # user is login
         return HttpResponseRedirect('/login/')
     ####EDITING
+    username   = ''
+    password   = ''
+    email      = ''
     message = None
     if request.POST:
         form = CaptchaTestForm(request.POST)
@@ -237,9 +242,9 @@ def Add(request):   #add an account for manage
             message = 'code was wrong'
     else:# GET
         form = CaptchaTestForm()
-    return render_to_response('add.html',{'captcha':form,'message':message, 'active_add':'active'},context_instance=RequestContext(request))
+    return render_to_response('add.html',{'captcha':form,'message':message, 'username':username, 'password':password, 'email':email, 'active_add':'active'},context_instance=RequestContext(request))
 
-def verifyOne(belongs_id,username,password,school):
+def userInfoverifyOne(belongs_id,username,password,school):
     users = userinfo.objects.filter(belongs_id = belongs_id, username = username, password = password, school = school,verify = False)
     for user in users:
         if (school == 'uestc'):
@@ -256,10 +261,10 @@ def verifyOne(belongs_id,username,password,school):
         else:
             return 'No this school'
 
-def VerifyFull_Ajax(request):
+def userInfoVerifyFull_Ajax(request):
     # there should return an alert to user: reload
     if request.user.is_authenticated():
-        message = verifyFull(request.user.id)
+        message = userInfoverifyFull(request.user.id)
         result= {'status':'1','message':str(message)}
     else:
         result= {'status':'0','message':'You are not login'}
@@ -267,7 +272,7 @@ def VerifyFull_Ajax(request):
     return HttpResponse(result)
 
 
-def verifyFull(belongs_id = 0):
+def userInfoverifyFull(belongs_id = 0):
     #this is verify by login_user,not decided by post
     users = userinfo.objects.filter(belongs_id = belongs_id)
     result = []
@@ -277,12 +282,12 @@ def verifyFull(belongs_id = 0):
             result.append(True)
         else:
             # print ('verify:'+user.username)
-            result.append(verifyOne(belongs_id, user.username, user.password, user.school))
+            result.append(userInfoverifyOne(belongs_id, user.username, user.password, user.school))
     return result
 
 
 
-def Change(request, userinfoID):
+def userInfoChange(request, userinfoID):
     if not request.user.is_authenticated(): # user is login
         return HttpResponseRedirect('/login/')
     ####EDITING
@@ -337,7 +342,7 @@ def Change(request, userinfoID):
 
 
 
-def Delete(request, userinfoID):
+def userInfoDelete(request, userinfoID):
     if not request.user.is_authenticated(): # user is login
         return HttpResponseRedirect('/login/')
     else:
@@ -346,4 +351,105 @@ def Delete(request, userinfoID):
         result = simplejson.dumps(result)
         return HttpResponse(result)
 
+
+def Kuaidi(request):
+    if not request.user.is_authenticated(): # user is login
+        return HttpResponseRedirect('/login/')
+    kuaidiList = {}
+    if request.POST:
+        if ('num' in request.POST and 'comment' in request.POST):
+            
+            belongs_id = request.user.id
+            num = request.POST.get('num','')
+            comment = request.POST.get('comment','')
+            if (len(re.findall('[^a-zA-Z0-9]',num)) > 0 or len(re.findall('[^\u4e00-\u9fa5a-zA-Z0-9]',comment))):
+                print (num, comment)
+                exit(0)
+            if(not kuaidiInfo.objects.filter(belongs_id = belongs_id, num = num)):### verify repeat
+                try:#userinfo add
+                    print (num)
+                    kuaidi = queryKuaidi(num)
+                    print (kuaidi)
+                    message = kuaidi['message']
+                    
+                    if (kuaidi['verify'] == -1):
+                        # return render_to_response('kuaidi.html',{'message':'can not find num'},context_instance=RequestContext(request))
+                        message = 'Can not find this num'
+                    elif (kuaidi['verify'] == 0):
+                        # NO DATA
+                        adder = kuaidiInfo.objects.create(belongs_id = belongs_id, num = kuaidi['num'], company = kuaidi['company'], comment = comment)
+                        message = 'Num exists, nut no data'
+                    else:
+                        for one in kuaidi['data']:#TODO sql
+                                adder = kuaidiInfo.objects.create(belongs_id = belongs_id, num = kuaidi['num'], company = kuaidi['company'], updateTime = kuaidi['updateTime'], time = one['time'], context = one['context'], comment = comment)
+                        message = 'Add success'
+                    # return render_to_response('kuaidi.html',{'message':'can not find num'},context_instance=RequestContext(request))
+                except Exception as e:# error?
+                    if (DEBUG):
+                        print (e)
+                    message = 'Wrong.'
+            else:
+                message = 'Exists this num.'
+    else:# GET
+        message = ''
+    kuaidiList = kuaidiInfo.objects.filter(belongs_id = request.user.id)
+    print (kuaidiList)
+    return render_to_response('kuaidi.html',{'message':message, 'kuaidiList':kuaidiList},context_instance=RequestContext(request))
+
+
+def queryKuaidi(num):
+    import requests
+    ans = {}
+    trackingNumber = num
+    ans['num'] = trackingNumber
+    headers = {
+        'Accept' : 'application/json, text/plain, */*',
+        'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36',
+        'Accept-Encoding' : 'gzip, deflate, sdch',
+        'Accept-Language' : 'en-US,en;q=0.8',
+        'Referer' : 'http://www.kuaidi100.com/',
+    }
+    getExpressURL = ('http://www.kuaidi100.com/autonumber/autoComNum?text=%s' % trackingNumber)
+    request = requests.get(getExpressURL, headers = headers)
+    result = eval(str(request.text))
+    try:
+        expressType = result['auto'][0]['comCode']
+        ans['company'] = expressType
+    except:
+        ans['verify'] = -1
+        ans['message'] = 'bad input, can not find company or no this code'
+        return ans
+    getLogisticsURL  = ('http://www.kuaidi100.com/query?type=%s&postid=%s' % (expressType, trackingNumber))
+    request = requests.get(getLogisticsURL, headers = headers)
+    result = eval(str(request.text))
+    ans['message'] = result['message']
+    try:
+        ans['data'] = result['data']
+        ans['updateTime'] = result['data'][0]['time']
+        ans['verify'] = 1
+    except:
+        ans['verify'] = 0   # find company, no data
+    return ans
+
+
+def kuaidiRefresh_Ajax(request):
+    if request.user.is_authenticated():
+        userID = request.user.id
+        message = Refresh(userID)
+        result= {'status':'1','message':str(message)}
+    else:
+        result= {'status':'0','message':'You are not login'}
+    result = simplejson.dumps(result)
+    return HttpResponse(result)
+
+
+def kuaidiDelete(request, ID):
+    if not request.user.is_authenticated(): # user is login
+        return HttpResponseRedirect('/login/')
+    else:
+        print (11111)
+        kuaidiInfo.objects.filter(id = ID).delete()
+        result= {'status':'0', 'message':'delete ' + ID}
+        result = simplejson.dumps(result)
+        return HttpResponse(result)
 

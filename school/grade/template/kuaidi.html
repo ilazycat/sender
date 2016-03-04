@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+
+
+{% block title%}
+add new grade's user
+{% endblock %}
+{% block content %}
+
+{% if message %}
+    <div class="alert alert-danger" role="alert">{{message}}</div>
+{% else %}
+    
+{% endif %}
+
+
+<body style="background-color: #333333;">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">快递</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Index <span class="sr-only">(current)</span></a></li>
+                    </ul>
+
+                    <form class="navbar-form navbar-left" role="add" method="post" action="/kuaidi/">
+                    {% csrf_token %} 
+                        <div class="form-group">
+                            <input type="text" id="num" name="num" class="form-control" placeholder="单号">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="comment" name="comment" class="form-control" placeholder="comment">
+                        </div>
+                        <button type="submit" class="btn btn-default">Add one</button>
+
+                    </form>
+
+                </div>
+            </div>
+        </nav>
+
+
+
+<table class="table table-hover table-bordered">
+
+<tr>
+  <td class="info">#</td>
+  <td class="info">备注</td>
+  <td class="info">快递公司</td>
+  <td class="info">运单号</td>
+  <td class="info">最终更新</td>
+  <td class="info">time</td>
+  <td class="info">content</td>
+  <td class="info">ACTIVE</td>
+</tr>
+
+{% for one in kuaidiList %}
+<tr>
+  {% if one.updateTime == one.time %}
+    <td class="success">{{forloop.counter}}</td>
+    <td class="info">{{one.comment}}</td>
+    <td class="success">{{one.company}}</td>
+    <td class="success">{{one.num}}</td>
+    <td class="success">{{one.updateTime}}</td>
+    <td class="success">{{one.time}}</td>
+    <td class="success">{{one.context}}</td>
+    <td class="success"><a href='javascript:deleteKuaidi({{ one.id }})'>delete</a></td>
+  {% else %}
+    <td class="danger">{{forloop.counter}}</td>
+    <td class="info">{{one.comment}}</td>
+    <td class="danger">{{one.company}}</td>
+    <td class="danger">{{one.num}}</td>
+    <td class="danger">{{one.updateTime}}</td>
+    <td class="danger">{{one.time}}</td>
+    <td class="danger">{{one.context}}</td>
+    <td class="danger"><a href='javascript:deleteKuaidi({{ one.id }})'>delete</a></td>
+  {% endif %}
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+
+This is manage page for {{user}}
+
+
+<script>
+
+
+    $(document).ready(function() {
+        $.get("/kuaidi/refresh/", function (data, status) {})
+    });
+
+    function deleteKuaidi(ID)
+    {
+        $.get("/kuaidi/delete/" + ID, function (data, status) {});
+        setTimeout("window.location.reload();",1000);
+    }
+
+</script>
+    
+
+{% endblock %}
+

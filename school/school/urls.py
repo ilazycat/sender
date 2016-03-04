@@ -16,7 +16,8 @@ Including another URLconf
 
 from django.conf.urls import include, url
 from django.contrib import admin
-from grade.views import current_datetime, hours_ahead, Index, Login, Logout, Home, Register, Manage, Add, Delete, Change, VerifyFull_Ajax, Userinfo, AddGrade_Ajax
+from django.views.static import serve
+from grade.views import current_datetime, hours_ahead, Index, Login, Logout, Home, Register, Manage, Add, userInfoDelete, userInfoChange, userInfoVerifyFull_Ajax, Userinfo, userInfoAddGrade_Ajax, Kuaidi, kuaidiRefresh_Ajax, kuaidiDelete
 import school.settings
 
 urlpatterns = [
@@ -25,6 +26,7 @@ urlpatterns = [
     # url(r'^accounts/logout/$', logout),
     url(r'^time/$',current_datetime),
     url(r'^index/$',Index),
+    url(r'^$',Index),
     url(r'^register/$',Register),
     url(r'^login/$',Login),
     url(r'^logout/$',Logout),
@@ -33,11 +35,14 @@ urlpatterns = [
     url(r'^captcha/', include('captcha.urls')),
     url(r'^manage/$', Manage),
     url(r'^add/$', Add),
+    url(r'^kuaidi/$', Kuaidi),
+    url(r'^kuaidi\/refresh/$', kuaidiRefresh_Ajax),
+    url(r'^kuaidi\/delete\/(\d{1,})/$', kuaidiDelete),
     url(r'^userinfo\/(\d{1,})/$', Userinfo),
-    url(r'^userinfo\/change\/(\d{1,})/$', Change),
-    url(r'^userinfo\/delete\/(\d{1,})/$', Delete),
-    url(r'^userinfo\/ajax_verify_full/$', VerifyFull_Ajax),
-    url(r'^userinfo\/(\d{1,})\/sync/$', AddGrade_Ajax),
-
-    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':school.settings.STATIC_URL}),
+    url(r'^userinfo\/change\/(\d{1,})/$', userInfoChange),
+    url(r'^userinfo\/delete\/(\d{1,})/$', userInfoDelete),
+    url(r'^userinfo\/ajax_verify_full/$', userInfoVerifyFull_Ajax),
+    url(r'^userinfo\/(\d{1,})\/sync/$', userInfoAddGrade_Ajax),
+    url(r'^static/(?P<path>.*)$', serve, {'document_root':school.settings.STATIC_URL}, name = 'serve'),
+    # url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':school.settings.STATIC_URL}),
 ]
