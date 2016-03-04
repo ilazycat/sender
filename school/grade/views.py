@@ -150,7 +150,7 @@ def Logout(request):
 def Home(request):
     # @login_required
     if request.user.is_authenticated():
-        return render_to_response('home.html',{'title':request.user.username+'\'s home page','user':request.user.username, 'active_home':'active'},context_instance=RequestContext(request))
+        return render_to_response('home.html',{'title':request.user.username+'\'s home page','user':request.user.username, 'active_home':'active', 'active_kuaidi':'active'},context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/index/')
 
@@ -242,7 +242,7 @@ def Add(request):   #add an account for manage
             message = 'code was wrong'
     else:# GET
         form = CaptchaTestForm()
-    return render_to_response('add.html',{'captcha':form,'message':message, 'username':username, 'password':password, 'email':email, 'active_add':'active'},context_instance=RequestContext(request))
+    return render_to_response('add.html',{'captcha':form,'message':message, 'username':username, 'password':password, 'email':email, 'active_add':'active', 'active_kuaidi':'active'},context_instance=RequestContext(request))
 
 def userInfoverifyOne(belongs_id,username,password,school):
     users = userinfo.objects.filter(belongs_id = belongs_id, username = username, password = password, school = school,verify = False)
