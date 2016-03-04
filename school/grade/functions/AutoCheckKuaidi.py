@@ -83,7 +83,7 @@ class DB:
             print ('error')
             return ans
         oldTime = response[0][0]
-        ans = latest['data'][-1]
+        # ans = latest['data'][-1]
         for i in range(len(latest['data']) - 1, 0 - 1, -1):
             newData = latest['data'][i]
             if (newData['time'] > oldTime):
@@ -93,6 +93,11 @@ class DB:
         sql = ("update %s set updatetime='%s'  where num='%s'" % (self.table, latest['updateTime'], num))
         self.cu.execute(sql)
         self.cx.commit()
+
+        sql = ("select context from %s where num='%s' and time='%s';" % (self.table, num, latest['updateTime']))
+        self.cu.execute(sql)
+        ans = self.cu.fetchall()[0][0]
+        ans = {'time':latest['updateTime'], 'context':ans}
         return ans
     def getCommentById(self, num):
         sql = ("select distinct comment from %s where num='%s'" % (self.table, num))
