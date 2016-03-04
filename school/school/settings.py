@@ -17,6 +17,7 @@ import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.getcwd()+'/grade/functions/')
 sys.path.append(os.getcwd()+'/grade/template/')
+
 SECRET_KEY = 'm5uj8fw_$c9+y33(y74^ssep@p#336z6ug)tx)&+f21%=%6yt7'
 
 DEBUG = True
@@ -56,7 +57,8 @@ ROOT_URLCONF = 'school.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/home/lc4t/Documents/git/sender/school/grade/template'],
+        # 'DIRS': ['/home/lc4t/Documents/git/sender/school/grade/template'],
+        'DIRS': [os.getcwd()+'/grade/template/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -102,7 +104,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_URLS = (
     os.path.join(BASE_DIR, "static"),
-    '/home/lc4t/Documents/git/sender/school/school/static/',
+    # '/home/lc4t/Documents/git/sender/school/school/static/',
+    os.getcwd()+'/school/static/'
 
 )
 

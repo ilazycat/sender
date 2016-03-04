@@ -2,7 +2,7 @@ import os
 
 import sys
 
-path = '/home/lc4t/web_py/school'
+path = '/home/lc4t/sender/school'
 
 if path not in sys.path:
 
