@@ -298,7 +298,8 @@ class GradeAnalyzer:
 
     def printCourses(self):
         self.total = self.termData.getCourseNumber()
-        self.gridCourses = self.soup.find(id = "grid21344342991_data").get_text()
+        self.gridCourses = self.soup.find(id = re.findall('<tbody id="(grid\d+_data)"', self.soup.prettify())[0]).get_text()
+
         temp = re.findall('(?u).*',self.gridCourses)
         tempA = []
         for i in range(0,len(temp),1):
@@ -524,4 +525,3 @@ def Exec(username,password,function):
 
 if __name__ == '__main__':
     main()
-

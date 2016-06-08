@@ -124,13 +124,8 @@ def Sender(school = 'uestc', minutes = 10, database = '../../data.db'):
                 DB_uestc(userID, database).sync(li)
                 email = db.getEmailByID(userID)
                 content = db.getNewUestcByID(userID, minutes)
-                # print (content)
-                # print (len(content))
-                # exit(0)
-                #print (content)
-                #print (len(content))
-                #exit(0)
-                if (len(content) > 10):
+
+                if (len(content) > 23):
                     content = str(userInfo['username']) + '\n' + content
                     print (content)
                     print ('send to '+','.join(email) + ' -->' + userInfo['username'] + ' @ ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -179,4 +174,3 @@ if __name__ == '__main__':
     #     t.start()
     # while (1):
     #     continue
-    
