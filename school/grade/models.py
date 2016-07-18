@@ -88,4 +88,3 @@ class kuaidiInfo(models.Model):
 
     class Meta:
         ordering = ["belongs_id"]
-

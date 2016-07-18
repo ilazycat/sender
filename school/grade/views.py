@@ -64,9 +64,8 @@ def hours_ahead(request, offset):
 
 
 def Index(request):
-# the index page for all
     if request.user.is_authenticated():
-        return render_to_response('index.html',{'title':'hello '+request.user.username})
+        return HttpResponseRedirect('/home/')
     return render_to_response('index.html',{'title':'hello~~~~'})
 
 def Register(request):
@@ -150,7 +149,7 @@ def Logout(request):
 def Home(request):
     # @login_required
     if request.user.is_authenticated():
-        return render_to_response('home.html',{'title':request.user.username+'\'s home page','user':request.user.username, 'active_home':'active', 'active_kuaidi':'active'},context_instance=RequestContext(request))
+        return render_to_response('home.html',{'title':request.user.username+'\'s home page','user':request.user.username, 'active_home':'active'},context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/index/')
 
@@ -242,7 +241,7 @@ def Add(request):   #add an account for manage
             message = 'code was wrong'
     else:# GET
         form = CaptchaTestForm()
-    return render_to_response('add.html',{'captcha':form,'message':message, 'username':username, 'password':password, 'email':email, 'active_add':'active', 'active_kuaidi':'active'},context_instance=RequestContext(request))
+    return render_to_response('add.html',{'captcha':form,'message':message, 'username':username, 'password':password, 'email':email, 'active_add':'active'},context_instance=RequestContext(request))
 
 def userInfoverifyOne(belongs_id,username,password,school):
     users = userinfo.objects.filter(belongs_id = belongs_id, username = username, password = password, school = school,verify = False)
@@ -358,7 +357,7 @@ def Kuaidi(request):
     kuaidiList = {}
     if request.POST:
         if ('num' in request.POST and 'comment' in request.POST):
-            
+
             belongs_id = request.user.id
             num = request.POST.get('num','')
             comment = request.POST.get('comment','')
@@ -371,7 +370,7 @@ def Kuaidi(request):
                     kuaidi = queryKuaidi(num)
                     print (kuaidi)
                     message = kuaidi['message']
-                    
+
                     if (kuaidi['verify'] == -1):
                         # return render_to_response('kuaidi.html',{'message':'can not find num'},context_instance=RequestContext(request))
                         message = 'Can not find this num'
@@ -452,4 +451,3 @@ def kuaidiDelete(request, ID):
         result= {'status':'0', 'message':'delete ' + ID}
         result = simplejson.dumps(result)
         return HttpResponse(result)
-
