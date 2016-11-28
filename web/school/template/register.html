@@ -1,0 +1,33 @@
+{% extends "base.html"%}
+
+
+{% block content%}
+
+<div class="col-xs-6">
+<div class="alert alert-{{messageType}}" role="alert">{{message}}</div>
+
+<form action='/register/' method='POST'>
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="username">Username, ^[_-a-zA-Z0-9]{5,18}$ </label>
+      <input type="username" class="form-control" name="username" placeholder="{{username}}">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password, ^[a-zA-Z0-9!@$&*,.?_-]{6,18}$ </label>
+      <input type="password" class="form-control" name="password" placeholder="{{password}}">
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" name="email" placeholder="{{email}}">
+    </div>
+    <div>
+    {{captcha}}
+    </div>
+
+    <input type="submit" class="btn btn-info col-xs-2" value="Register" />
+  </form>
+<div>
+
+{% endblock %}

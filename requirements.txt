@@ -1,0 +1,5 @@
+django
+django-simple-captcha
+celery
+redis
+lxml

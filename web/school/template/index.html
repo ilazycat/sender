@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title%}
+{{title}}
+{% endblock %}
+
+{% block content %}
+{% if user %}
+{% include "header.html" %}
+{% endif %}
+
+<div style="margin:5%;">
+  <div class="panel panel-primary">
+    <div class="panel-heading">消息通知系统</div>
+    <div class="panel-body">
+      当前版本 2.0.0
+    </div>
+  </div>
+
+
+  <div class="panel panel-info">
+
+    <div class="panel-heading">当前模块支持</div>
+
+    <div class="panel-body">
+      <p>以下模块在<a href="https://github.com/lc4t/sender">Github</a>提交通过</p>
+    </div>
+
+    <table class="table">
+      <tr>
+        <td>#</td>
+        <td>功能</td>
+        <td>作者</td>
+        <td>时间</td>
+      </tr>
+      {% for one in function %}
+      <tr>
+        <td class="success">{{forloop.counter}}</td>
+        <td class="success">{{one.descript}}</td>
+        <td class="success">{{one.author}}</td>
+        <td class="success">{{one.submit}}</td>
+      </tr>
+
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+
+<div class="text-center">
+  <a href="/login"><button type="button" class="btn btn-success">Login</button></a>
+  <a href="/register"><button type="button" class="btn btn-info">Register</button></a>
+</div>
+
+{% endblock %}
