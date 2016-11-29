@@ -15,9 +15,7 @@ from django.contrib.auth.models import User
 from captcha.fields import CaptchaField
 from captcha.models import CaptchaStore
 import subprocess
-# from functions.Uestc import Exec
-# from functions.Uestc2db import DB_uestc
-from functions.school_uestc_grade_check_api import API as uestc
+from functions.school_uestc_grade_get_api import API as uestc
 import json
 class CaptchaTestForm(forms.Form):
     captcha = CaptchaField()

@@ -103,7 +103,8 @@ def queryKuaidi(num):
 def kuaidiRefresh_Ajax(request):
     if request.user.is_authenticated():
         userID = request.user.id
-        message = kuaidi_api.update_id(userID)
+        _ = kuaidi_api()
+        message = _.update_id(userID)
         result= {'status':'1','message':str(message)}
     else:
         result= {'status':'0','message':'You are not login'}
@@ -115,7 +116,7 @@ def kuaidiDelete(request, ID):
     if not request.user.is_authenticated(): # user is login
         return HttpResponseRedirect('/login/')
     else:
-        kuaidiInfo.objects.filter(id = ID).delete()
+        kuaidiInfo.objects.filter(id=ID, belongs_id=request.user.id).delete()
         result= {'status':'0', 'message':'delete ' + ID}
         result = json.dumps(result)
         return HttpResponse(result)

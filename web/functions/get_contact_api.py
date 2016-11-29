@@ -27,7 +27,4 @@ class API:
 
 
 if __name__ == '__main__':
-    a = API().get_main_email_by_id(1)
-    print(a)
-    # print(a.get_main_email_by_id(1))
-    # list_email = a.get_school_alert_mail(1)
+    pass

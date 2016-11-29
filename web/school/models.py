@@ -9,8 +9,8 @@ class userinfo(models.Model):
     belongs_id      = models.IntegerField() #
     username        = models.CharField(max_length = 25) # belong to web_username
     name            = models.TextField(null = True)
-    password        = models.CharField(max_length = 25 )
-    cookies         = models.CharField(max_length = 255)
+    password        = models.CharField(max_length = 25, null=True)
+    cookies         = models.CharField(max_length = 255, null=True)
     email           = models.CharField(max_length = 255, null=True) #models.EmailField()
     school          = models.TextField()
     verify          = models.BooleanField() # is verify success
