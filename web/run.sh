@@ -1,4 +1,5 @@
 #! /bin/sh
 ### pwd = sender/web
-celery -A web worker --loglevel=info --beat
-redis-server
+redis-server &
+celery -A web worker --loglevel=info --beat &
+

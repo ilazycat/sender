@@ -6,3 +6,4 @@
 *.pyc
 *.rdb
 .DS_Store
+celerybeat-schedule
