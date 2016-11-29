@@ -312,7 +312,9 @@ class uestc():
         loginURLCaptcha = "http://idas.uestc.edu.cn/authserver/needCaptcha.html?username=%s&_=%s" % (username, str(time.time()))
         visit_r = self.r.get(url=self.loginURL, headers=self.headers)
         check_captcha_r = self.r.get(loginURLCaptcha, headers=self.headers)
-
+        if check_captcha_r.text == 'true':
+            print(username + 'need captcha')
+            return False
         params_lt = re.findall('name="lt" value="(.*)"/>',visit_r.text)[0]
         post_data = {
             'username': username,
@@ -413,7 +415,6 @@ class DB_uestc:
 
     def update_cookie(self, belongs_id, username, cookies):
         sql = 'update %s set cookies=\'%s\' where belongs_id=%s and username=\'%s\';' % ('school_userinfo', cookies, belongs_id, username)
-        print(sql)
         self.cu.execute(sql)
         self.cx.commit()
 
@@ -452,6 +453,7 @@ class API:
                 self.update_cookies(belongs_id, username, res)
                 return res
             else:
+                print('password login error:' + username)
                 return False
 
 

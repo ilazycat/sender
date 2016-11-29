@@ -55,6 +55,11 @@ def Index(request):
         'author': 'lc4t',
         'descript': 'uestc成绩更新通知',
         'submit': '2015.1.22'
+    },
+    {
+        'author': 'lc4t',
+        'descript': '快递更新通知',
+        'submit': '2016.11.29'
     }
     ]
     return render(request, 'index.html',{'title':'Welcome', 'user': False, 'function': function})
@@ -229,17 +234,17 @@ def Add(request):   #add an account for manage
         form = CaptchaTestForm()
     return render(request, 'add.html',{'captcha':form,'message':message, 'username':username, 'password':password, 'cookies': cookies, 'email':email, 'active_add':'active'})
 
-def userInfoverifyOne(belongs_id, username, password, school):
+def userInfoverifyOne(belongs_id, username, school):
     users = userinfo.objects.filter(belongs_id = belongs_id, username = username, school = school, verify = False)
     for user in users:
         if (school == 'uestc'):
             try:
                 _ = uestc()
-                status = _.login(belongs_id, username, password, cookie)
+                status = _.login(belongs_id, username, user.password, user.cookies)
             except Exception as e:
                 status = e
             if status:
-                user = userinfo.objects.filter(username = username, password = password, school = school).update(verify = True)
+                user = userinfo.objects.filter(belongs_id=belongs_id, username = username, school = school).update(verify = True)
                 return True
             else:
                 return status
@@ -263,12 +268,10 @@ def userInfoverifyFull(belongs_id = 0):
     users = userinfo.objects.filter(belongs_id = belongs_id)
     result = []
     for user in users:
-        # print (user)
         if user.verify:
             result.append(True)
         else:
-            # print ('verify:'+user.username)
-            result.append(userInfoverifyOne(belongs_id, user.username, user.password, user.school))
+            result.append(userInfoverifyOne(belongs_id, user.username, user.school))
     return result
 
 
