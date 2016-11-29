@@ -3,3 +3,5 @@ django-simple-captcha
 celery
 redis
 lxml
+requests
+beautifulsoup4

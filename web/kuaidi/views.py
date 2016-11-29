@@ -30,9 +30,8 @@ def Kuaidi(request):
             belongs_id = request.user.id
             num = request.POST.get('num','')
             comment = request.POST.get('comment','')
-            if (len(re.findall('[^a-zA-Z0-9]',num)) > 0 or len(re.findall('[^\u4e00-\u9fa5a-zA-Z0-9]',comment))):
-                print (num, comment)
-                exit(0)
+            # if (len(re.findall('[^a-zA-Z0-9]',num)) > 0 or len(re.findall('[^\u4e00-\u9fa5a-zA-Z0-9]',comment))):
+            #     print (num, comment)
             if(not kuaidiInfo.objects.filter(belongs_id = belongs_id, num = num)):### verify repeat
                 try:#userinfo add
                     print (num)
