@@ -152,7 +152,9 @@ class API:
         for i in nums:
             new_router = self.update_by_num(i)
             print(new_router)
-            if len(new_router) == 0:
+            if new_router is None:
+                continue
+            elif len(new_router) == 0:
                 continue
             else:
                 for _id in self.get_belongs_id_by_num(i):
