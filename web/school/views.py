@@ -58,7 +58,7 @@ def Index(request):
     },
     {
         'author': 'lc4t',
-        'descript': '快递更新通知,填写单号和备注,3min检查一次,邮件通知到注册邮箱',
+        'descript': '快递更新通知,填写单号和备注,5min检查一次,邮件通知到注册邮箱',
         'submit': '2016.11.29'
     }
     ]
