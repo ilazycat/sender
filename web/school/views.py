@@ -53,12 +53,12 @@ def Index(request):
     function = [
     {
         'author': 'lc4t',
-        'descript': 'uestc成绩更新通知',
+        'descript': 'uestc成绩更新通知,30min检查一次,默认cookies登录,密码正确自动生成cookies,多个邮箱使用英文逗号分隔',
         'submit': '2015.1.22'
     },
     {
         'author': 'lc4t',
-        'descript': '快递更新通知',
+        'descript': '快递更新通知,填写单号和备注,3min检查一次,邮件通知到注册邮箱',
         'submit': '2016.11.29'
     }
     ]
@@ -156,7 +156,7 @@ def Manage(request):
         userinfoList = userinfo.objects.filter(belongs_id = request.user.id)
         return render(request, 'manage.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList})
     else:
-        return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/index/')
 
 
 
@@ -166,7 +166,7 @@ def Grade(request):
         userinfoList = userinfo.objects.filter(belongs_id = request.user.id)
         return render(request, 'grade.html',{'user':request.user.username, 'active_manage':'active', 'userinfoList':userinfoList})
     else:
-        return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/index/')
 #TODO : NO function to this
 
 def Userinfo(request, userinfoID):
@@ -200,7 +200,7 @@ def userInfoAddGrade_Ajax(request, userinfoID = 0):
 
 def Add(request):   #add an account for manage
     if not request.user.is_authenticated(): # user is login
-        return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/index/')
     ####EDITING
     username   = ''
     password   = ''
@@ -209,15 +209,15 @@ def Add(request):   #add an account for manage
     message = None
     if request.POST:
         form = CaptchaTestForm(request.POST)
-        if form.is_valid():
-            human = True
-            if ('username' in request.POST and 'password' in request.POST  and 'cookies' in request.POST and 'school' in request.POST):
-                belongs_id = request.user.id
-                username   = request.POST.get('username','')
-                password   = request.POST.get('password','')
-                cookies     = request.POST.get('cookies','')
-                email      = request.POST.get('email','')
-                school     = request.POST.get('school','')
+        if ('username' in request.POST and 'password' in request.POST  and 'cookies' in request.POST and 'school' in request.POST):
+            belongs_id = request.user.id
+            username   = request.POST.get('username','')
+            password   = request.POST.get('password','')
+            cookies     = request.POST.get('cookies','')
+            email      = request.POST.get('email','')
+            school     = request.POST.get('school','')
+            if form.is_valid():
+                human = True
                 if(not userinfo.objects.filter(belongs_id = belongs_id, username = username, school = school)):### verify repeat
                     try:#userinfo add
                         adder = userinfo.objects.create(belongs_id=belongs_id , username=username, password=password, cookies=cookies, email=email, school = school, verify = False)
@@ -226,10 +226,10 @@ def Add(request):   #add an account for manage
                         message = 'This user cannot add.'
                 else:#had added
                     message = 'You had added this account.'
-            else:#no username,password value
-                message = 'What are you doing?'
-        else:
-            message = 'code was wrong'
+            else:
+                message = 'code was wrong'
+        else:#no username,password value
+            message = 'What are you doing?'
     else:# GET
         form = CaptchaTestForm()
     return render(request, 'add.html',{'captcha':form,'message':message, 'username':username, 'password':password, 'cookies': cookies, 'email':email, 'active_add':'active'})
@@ -278,7 +278,7 @@ def userInfoverifyFull(belongs_id = 0):
 
 def userInfoChange(request, userinfoID):
     if not request.user.is_authenticated(): # user is login
-        return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/index/')
     ####EDITING
     message = None
     users = userinfo.objects.filter(id = userinfoID)[0]
@@ -330,7 +330,7 @@ def userInfoChange(request, userinfoID):
 
 def userInfoDelete(request, userinfoID):
     if not request.user.is_authenticated(): # user is login
-        return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/index/')
     else:
         userinfo.objects.filter(id = userinfoID).delete()
         result= {'status':'0', 'message':'delete ' + userinfoID}

@@ -49,3 +49,9 @@ def uestc_send_grade():
     else:
         for i in ans:
             send_mail.delay('成绩通知', '\r\n'.join(i['message']), i['email'])
+
+
+@periodic_task(run_every=crontab(hour='3'), name='kuaidi_clean')
+def kuaidi_clean():
+    _ = kuaidi()
+    _.clean(30)

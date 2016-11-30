@@ -22,7 +22,7 @@ import json
 
 def Kuaidi(request):
     if not request.user.is_authenticated(): # user is login
-        return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/index/')
     kuaidiList = {}
     if request.POST:
         if ('num' in request.POST and 'comment' in request.POST):
@@ -113,7 +113,7 @@ def kuaidiRefresh_Ajax(request):
 
 def kuaidiDelete(request, ID):
     if not request.user.is_authenticated(): # user is login
-        return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/index/')
     else:
         kuaidiInfo.objects.filter(id=ID, belongs_id=request.user.id).delete()
         result= {'status':'0', 'message':'delete ' + ID}

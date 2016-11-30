@@ -168,7 +168,12 @@ class API:
                     ans.append({'email': mail, 'message': message})
         return ans
 
-
+    def clean(self, days=7):
+        submit_time = datetime.datetime.now() - datetime.timedelta(days=days)
+        sql = 'delete from %s where submit < \'%s\';' % (self.table, submit_time.strftime('%Y-%m-%d'))
+        print(sql)
+        self.cu.execute(sql)
+        self.cx.commit()
 
 if __name__ == '__main__':
     pass
