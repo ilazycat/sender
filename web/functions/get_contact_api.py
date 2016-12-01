@@ -7,6 +7,7 @@ class API:
 
     def get_main_email_by_id(self, belongs_id):
         # get regist auth email
+        # return []
         sql = 'select email from %s where id=%d' % ('auth_user', belongs_id)
         self.cu.execute(sql)
         response = self.cu.fetchall()
@@ -17,6 +18,7 @@ class API:
 
     def get_school_alert_mail(self, _id):
         # get school alert email in userinfo
+        # return []
         sql = 'select email from %s where id=%d' % ('school_userinfo', _id)
         self.cu.execute(sql)
         response = self.cu.fetchall()

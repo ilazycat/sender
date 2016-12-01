@@ -158,7 +158,7 @@ class API:
                 continue
             else:
                 for _id in self.get_belongs_id_by_num(i):
-                    mail = get_mail.get_main_email_by_id(_id)[0]
+                    mail = get_mail.get_main_email_by_id(_id)
                     message = '''
                     [%s] 单号为[%s]的%s快递更新路由，\n
                     %s\n
