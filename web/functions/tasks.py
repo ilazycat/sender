@@ -7,7 +7,7 @@ from .get_contact_api import API as get_email
 from .school_uestc_grade_check_api import API as uestc_check_grade
 
 
-@periodic_task(run_every=crontab(minute='*/1'), name='check_kuaidi')
+@periodic_task(run_every=crontab(minute='*/5'), name='check_kuaidi')
 def check_kuaidi():
     _ = kuaidi()
     ans = _.check()
@@ -34,23 +34,23 @@ def get_main_email(user_id):
     _ = get_email().get_main_email_by_id(user_id)
     return list(_)
 
-#
-# @shared_task(name='get_school_alert_email')
-# def get_school_alert_email(belongs_id):
-#     _ = get_email().get_school_alert_mail(belongs_id)
-#     return _
-#
-#
-# @periodic_task(run_every=crontab(minute='*/30'), name='uestc_send_grade')
-# def uestc_send_grade():
-#     _ = uestc_check_grade(30)
-#     ans = _.checker()
-#     if len(ans) == 0:
-#         print('No update uestc grade')
-#         return
-#     else:
-#         for i in ans:
-#             send_mail.delay('成绩通知', '\r\n'.join(i['message']), i['email'])
+
+@shared_task(name='get_school_alert_email')
+def get_school_alert_email(belongs_id):
+    _ = get_email().get_school_alert_mail(belongs_id)
+    return _
+
+
+@periodic_task(run_every=crontab(minute='*/30'), name='uestc_send_grade')
+def uestc_send_grade():
+    _ = uestc_check_grade(30)
+    ans = _.checker()
+    if len(ans) == 0:
+        print('No update uestc grade')
+        return
+    else:
+        for i in ans:
+            send_mail.delay('成绩通知', '\r\n'.join(i['message']), i['email'])
 
 
 @periodic_task(run_every=crontab(hour='3'), name='kuaidi_clean')
