@@ -33,28 +33,27 @@ def Kuaidi(request):
             # if (len(re.findall('[^a-zA-Z0-9]',num)) > 0 or len(re.findall('[^\u4e00-\u9fa5a-zA-Z0-9]',comment))):
             #     print (num, comment)
             if(not kuaidiInfo.objects.filter(belongs_id = belongs_id, num = num)):### verify repeat
-                try:#userinfo add
-                    print (num)
-                    kuaidi = queryKuaidi(num)
-                    print (kuaidi)
-                    message = kuaidi['message']
+                # try:#userinfo add
+                # print (num)
+                kuaidi = queryKuaidi(num)
+                # print (kuaidi)
+                message = kuaidi['message']
 
-                    if (kuaidi['verify'] == -1):
-                        # return render_to_response('kuaidi.html',{'message':'can not find num'})
-                        message = 'Can not find this num'
-                    elif (kuaidi['verify'] == 0):
-                        # NO DATA
-                        adder = kuaidiInfo.objects.create(belongs_id = belongs_id, num = kuaidi['num'], company = kuaidi['company'], comment = comment)
-                        message = 'Num exists, nut no data'
-                    else:
-                        for one in kuaidi['data']:#TODO sql
-                                adder = kuaidiInfo.objects.create(belongs_id = belongs_id, num = kuaidi['num'], company = kuaidi['company'], updateTime = kuaidi['updateTime'], time = one['time'], context = one['context'], comment = comment)
-                        message = 'Add success'
+                if (kuaidi['verify'] == -1):
                     # return render_to_response('kuaidi.html',{'message':'can not find num'})
-                except Exception as e:# error?
-                    if (DEBUG):
-                        print (e)
-                    message = 'Wrong.'
+                    message = 'Can not find this num'
+                elif (kuaidi['verify'] == 0):
+                    # NO DATA
+                    adder = kuaidiInfo.objects.create(belongs_id = belongs_id, num = kuaidi['num'], company = kuaidi['company'], comment = comment)
+                    message = 'Num exists, nut no data'
+                else:
+                    for one in kuaidi['data']:#TODO sql
+                            adder = kuaidiInfo.objects.create(belongs_id = belongs_id, num = kuaidi['num'], company = kuaidi['company'], updateTime = kuaidi['updateTime'], time = one['time'], context = one['context'], comment = comment)
+                    message = 'Add success'
+                # return render_to_response('kuaidi.html',{'message':'can not find num'})
+                # except Exception as e:# error?
+                #     print(e)
+                #     message = 'Wrong.'
             else:
                 message = 'Exists this num.'
     else:# GET
@@ -87,7 +86,7 @@ def queryKuaidi(num):
         return ans
     getLogisticsURL  = ('http://www.kuaidi100.com/query?type=%s&postid=%s' % (expressType, trackingNumber))
     request = requests.get(getLogisticsURL, headers = headers)
-    result = eval(str(request.text))
+    result = json.loads(request.text)
     ans['message'] = result['message']
     try:
         ans['data'] = result['data']
@@ -115,7 +114,9 @@ def kuaidiDelete(request, ID):
     if not request.user.is_authenticated(): # user is login
         return HttpResponseRedirect('/index/')
     else:
-        kuaidiInfo.objects.filter(id=ID, belongs_id=request.user.id).delete()
+        # kuaidiInfo.objects.filter(id=ID, belongs_id=request.user.id).delete()
+        num = kuaidiInfo.objects.filter(id=ID, belongs_id=request.user.id)[0].num
+        kuaidiInfo.objects.filter(belongs_id=request.user.id, num=num).delete()
         result= {'status':'0', 'message':'delete ' + ID}
         result = json.dumps(result)
         return HttpResponse(result)

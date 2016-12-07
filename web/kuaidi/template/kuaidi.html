@@ -105,7 +105,7 @@ This is manage page for {{user}}
 
     function deleteKuaidi(ID)
     {
-        $.get("/kuaidi/delete/" + ID, function (data, status) {});
+        $.get("/kuaidi/delete/" + ID + "/", function (data, status) {});
         setTimeout("window.location.reload();",1000);
     }
 
