@@ -13,7 +13,7 @@ from urllib.parse import urlencode
 import time
 import lxml
 import json
-from json.decoder import JSONDecodeError
+# from json.decoder import JSONDecodeError
 import sqlite3
 
 
@@ -439,10 +439,15 @@ class API:
                 if res:
                     self.status = True
                     return res
-        except JSONDecodeError:
+        except ValueError:
             print('cookies load error ' + username)
-            pass
+        # except JSONDecodeError:
+        #     print('cookies load error ' + username)
+        #     pass
         except TypeError:
+            pass
+        except Exception as e:
+            print(e)
             pass
         del self.u
         print('test password:' + username)
