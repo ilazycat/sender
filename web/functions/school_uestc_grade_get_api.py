@@ -310,6 +310,7 @@ class uestc():
 
 
     def login_password(self, username, password):
+        self.r.cookies.clear()
         loginURLCaptcha = "http://idas.uestc.edu.cn/authserver/needCaptcha.html?username=%s&_=%s" % (username, str(time.time()))
         visit_r = self.r.get(url=self.loginURL, headers=self.headers)
         check_captcha_r = self.r.get(loginURLCaptcha, headers=self.headers)
