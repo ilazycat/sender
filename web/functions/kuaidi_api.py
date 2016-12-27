@@ -50,7 +50,7 @@ class API:
             'Referer' : 'http://www.kuaidi100.com/',
         }
         getExpressURL = ('http://www.kuaidi100.com/autonumber/autoComNum?text=%s' % trackingNumber)
-        request = requests.get(getExpressURL, headers = headers)
+        request = requests.get(getExpressURL)
         result = json.loads(request.text)
         try:
             expressType = result['auto'][0]['comCode']
@@ -60,7 +60,7 @@ class API:
             ans['message'] = 'bad input, can not find company or no this code'
             return ans
         getLogisticsURL  = ('http://www.kuaidi100.com/query?type=%s&postid=%s' % (expressType, trackingNumber))
-        request = requests.get(getLogisticsURL, headers = headers)
+        request = requests.get(getLogisticsURL)
         result = json.loads(request.text)
         ans['message'] = result['message']
         try:
