@@ -131,15 +131,13 @@ class API:
         return ans
 
 
-
-
     def get_new(self, _id, belongs_id, username, password, cookies):
         _ = uestc(self.db)
-        status = _.login(belongs_id, username, password, cookies)
+        status = _.login(belongs_id, username, password, cookies)   # belongs_id: user's id
         if status:
             li = []
             li = _.get_list_course()
-            _.update_db(belongs_id, li)
+            _.update_db(_id, li) # belongs_id: userinfo's id
             time_str = ((datetime.datetime.now() - datetime.timedelta(minutes = self.minutes)).strftime('%Y-%m-%d %H:%M:%S'))
             sql = "select * from %s where updateTime>'%s'" % (self.school_grades, time_str)
             self.cu.execute(sql)

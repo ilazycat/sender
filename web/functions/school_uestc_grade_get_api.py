@@ -381,6 +381,7 @@ class uestc():
 
 class DB_uestc:
     def __init__(self, belongs_id, db = '../data.db'):
+        print(belongs_id)
         self.cx = sqlite3.connect(db)
         self.cu = self.cx.cursor()
         self.table = 'school_grades'
@@ -429,7 +430,7 @@ class API:
     def login(self, belongs_id, username = None, password = None, cookies = None):
         '''
         login success: return cookies
-        login failed: return Fals
+        login failed: return Flase
         '''
         print('test cookies:' + username)
         self.u = uestc()
@@ -472,12 +473,12 @@ class API:
         return list(self.u.get_courses(pretty=True))
 
 
-    def update_db(self, belongs_id, course_list):
+    def update_db(self, belongs_id, course_list):   # belongs_id: userinfo's id
         _ = DB_uestc(belongs_id, self.db)
         _.sync(course_list)
 
 
-    def update_cookies(self, belongs_id, username, cookies):
+    def update_cookies(self, belongs_id, username, cookies):    # user's id
         _ = DB_uestc(belongs_id, self.db)
         _.update_cookie(belongs_id, username, cookies)
 
