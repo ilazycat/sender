@@ -119,11 +119,12 @@ class API:
                 message = []
                 for one in new_grades:
                     a_grade = '''
+                    [%s]
                     %s学年 第 %s 学期 %s 课程(%s, %s学分) 成绩更新\r\n
                     当前得分为 %s， 获得学分 %s， 最终得分 %s\r\n
                     检测时间 %s\r\n
                     \r\n
-                    ''' % (one[2], one[3], one[6], one[7], one[8], one[9], one[12], one[11], one[13])
+                    ''' % (i[2], one[2], one[3], one[6], one[7], one[8], one[9], one[12], one[11], one[13])
                     message.append(a_grade)
                 ans.append({'email': mail, 'message': message})
             else:
