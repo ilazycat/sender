@@ -105,7 +105,7 @@ class API:
         response = self.cu.fetchall()
 
         ans = []
-        for i in response:
+        for i in response:  # i: (userinfoid, belongsid, username, password, session), check every userinfo
             new_grades = []
             new_grades = self.get_new(*i)
             if new_grades == False:
@@ -140,7 +140,7 @@ class API:
             li = _.get_list_course()
             _.update_db(_id, li) # belongs_id: userinfo's id
             time_str = ((datetime.datetime.now() - datetime.timedelta(minutes = self.minutes)).strftime('%Y-%m-%d %H:%M:%S'))
-            sql = "select * from %s where updateTime>'%s'" % (self.school_grades, time_str)
+            sql = "select * from %s where updateTime>'%s' and belongs_id=%d" % (self.school_grades, time_str, _id)
             self.cu.execute(sql)
             new_grades = self.cu.fetchall()
         else:
