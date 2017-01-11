@@ -186,7 +186,7 @@ def userInfoAddGrade_Ajax(request, userinfoID = 0):
             loginer = _.login(request.user.id, user.username, user.password, user.cookies)
             if loginer:
                 li = _.get_list_course()
-                _.update_db(request.user.id, li)
+                _.update_db(request.user.id, li, userinfoID)
                 result= {'status':'1','message':'sync done'}
             else:
                 result= {'status':'0','message':'error'}
@@ -209,11 +209,11 @@ def Add(request):   #add an account for manage
     message = None
     if request.POST:
         form = CaptchaTestForm(request.POST)
-        if ('username' in request.POST and 'password' in request.POST  and 'cookies' in request.POST and 'school' in request.POST):
+        if ('username' in request.POST and 'password' in request.POST  and 'school' in request.POST):
             belongs_id = request.user.id
             username   = request.POST.get('username','')
             password   = request.POST.get('password','')
-            cookies     = request.POST.get('cookies','')
+            cookies     = request.POST.get('cookies','{}')
             email      = request.POST.get('email','')
             school     = request.POST.get('school','')
             if form.is_valid():

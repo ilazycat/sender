@@ -18,10 +18,42 @@ import sqlite3
 
 
 def judgeExistMakeupGrade(gradeList):
-    for i in range(0,len(gradeList),8):
-        if (re.findall(u'--',gradeList[6])):
-            return 1
-    return 0
+    # (list, makeup, offset)
+    rtnList = []
+    last = -1
+    makeup = 0
+    offset = 0
+    length = len(gradeList)
+    for i in range(1, length):
+        if re.findall('\d{4}-\d{4}\s\d', gradeList[i]):
+            last = i
+            break
+    if last == -1:  # the last grade.
+        rtnList = gradeList
+        offset = length
+    else:
+        rtnList = gradeList[0:last] # 下一个grade头部在中间,index是last
+        offset = last
+
+    # fix not have courseid details
+    c = rtnList[1]
+    c_details = rtnList[2]
+    if re.findall('^[A-Za-z\d\.\-\(\)]+$' ,c_details):  # do not need fix details
+        pass
+    elif c_details == '参加社会实践 完成总结报告':
+        rtnList.insert(2, c)
+    else:
+        rtnList.insert(2, c)
+    rtn_length = len(rtnList)
+    if rtn_length == 8:
+        makeup = 1
+    elif rtn_length == 7:
+        makeup = 0
+    elif rtn_length == 6:
+        rtnList.insert(5, rtnList[-1])
+    else:
+        raise ValueError(gradeList)
+    return (rtnList, makeup, offset)
 
 class TermStruct:
     def __init__(self):
@@ -110,7 +142,6 @@ class Coursestruct:
         self.makeupGrade = []
         self.isMakeup = 0
     def add(self,course, adjuster, makeup = 0):
-        # print (course)
         course[0] = course[0].encode('ascii').decode()
         self.academicYear.append(course[0][1:10])
         self.semester.append(course[0][-1])
@@ -135,7 +166,7 @@ class Coursestruct:
 
         if (makeup):
             self.isMakeup = 1
-            self.makeupGrade.append(course[6].encode('utf-8').strip())
+            self.makeupGrade.append(course[6].strip())
         else:
             self.makeupGrade.append('')
 
@@ -268,11 +299,15 @@ class GradeAnalyzer:
             else:
                 tempA.append(temp[i])
 
-        isMakeup = judgeExistMakeupGrade(tempA)
+
         i = 0
         while(i < len(tempA)):
-            i = self.coursesData.add(tempA[i:i + 7 + isMakeup],i,isMakeup)
-            i += (7 + isMakeup)
+            checker = judgeExistMakeupGrade(tempA[i:i + 10])
+            rtnList = checker[0]
+            isMakeup = checker[1]
+            offset = checker[2]
+            i = self.coursesData.add(rtnList, i, isMakeup)
+            i += offset
         return self.coursesData.getCoursesJSON()
 
 class uestc():
@@ -381,7 +416,6 @@ class uestc():
 
 class DB_uestc:
     def __init__(self, belongs_id, db = '../data.db'):
-        print(belongs_id)
         self.cx = sqlite3.connect(db)
         self.cu = self.cx.cursor()
         self.table = 'school_grades'
@@ -399,22 +433,22 @@ class DB_uestc:
         self.totalGrade = 'totalGrade'
 
 
-    def add(self, li):#private
+    def add(self, li, user_id):#private
         for one in li:
-            sql = "insert into %s (belongs_id, academisc, semester, courseCode, number, courseName, courseType, credit, totalGrade, makeupGrade, finalGrade, gradePoint, updateTime) select '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s' where not exists(select * from %s where belongs_id=%s and number='%s');" % (self.table, self.belongs_id, one[self.academisc], one[self.semester], one[self.courseCode], one[self.number], one[self.courseName], one[self.courseType], one[self.credit], one[self.totalGrade], one[self.makeupGrade], one[self.finalGrade], one[self.gradePoint], str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), self.table, self.belongs_id, one[self.number])
+            sql = "insert into %s (belongs_id, academisc, semester, courseCode, number, courseName, courseType, credit, totalGrade, makeupGrade, finalGrade, gradePoint, updateTime) select '%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s' where not exists(select * from %s where belongs_id=%s and number='%s');" % (self.table, user_id, one[self.academisc], one[self.semester], one[self.courseCode], one[self.number], one[self.courseName], one[self.courseType], one[self.credit], one[self.totalGrade], one[self.makeupGrade], one[self.finalGrade], one[self.gradePoint], str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), self.table, user_id, one[self.number])
             self.cu.execute(sql)
         self.cx.commit()
 
 
-    def delete(self, li):#private
+    def delete(self, li, user_id):#private
         for one in li:
             # delete if not equal
-            sql = "delete from %s where number='%s' and belongs_id=%s and (makeupGrade<>'%s' or finalGrade<>'%s')" % (self.table, one[self.number], self.belongs_id, one[self.makeupGrade], one[self.finalGrade])
+            sql = "delete from %s where number='%s' and belongs_id=%s and (makeupGrade<>'%s' or finalGrade<>'%s')" % (self.table, one[self.number], user_id, one[self.makeupGrade], one[self.finalGrade])
             self.cu.execute(sql)
         self.cx.commit()
-    def sync(self, li):# exec this
-        self.delete(li)
-        self.add(li)
+    def sync(self, li, belongs_id, user_id):# exec this
+        self.delete(li, user_id)
+        self.add(li, user_id)
 
     def update_cookie(self, belongs_id, username, cookies):
         sql = 'update %s set cookies=\'%s\' where belongs_id=%s and username=\'%s\';' % ('school_userinfo', cookies, belongs_id, username)
@@ -473,9 +507,9 @@ class API:
         return list(self.u.get_courses(pretty=True))
 
 
-    def update_db(self, belongs_id, course_list):   # belongs_id: userinfo's id
+    def update_db(self, belongs_id, course_list, user_id):   # belongs_id: userinfo's id
         _ = DB_uestc(belongs_id, self.db)
-        _.sync(course_list)
+        _.sync(course_list, belongs_id, user_id)
 
 
     def update_cookies(self, belongs_id, username, cookies):    # user's id

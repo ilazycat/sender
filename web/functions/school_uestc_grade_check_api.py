@@ -138,7 +138,7 @@ class API:
         if status:
             li = []
             li = _.get_list_course()
-            _.update_db(_id, li) # belongs_id: userinfo's id
+            _.update_db(belongs_id, li, _id)
             time_str = ((datetime.datetime.now() - datetime.timedelta(minutes = self.minutes)).strftime('%Y-%m-%d %H:%M:%S'))
             sql = "select * from %s where updateTime>'%s' and belongs_id=%d" % (self.school_grades, time_str, _id)
             self.cu.execute(sql)
