@@ -1,7 +1,7 @@
-django
-django-simple-captcha
-celery
-redis
+django>=1.10
+django-simple-captcha>=0.5.3
+celery>=4.0.2
+redis>=2.10.5
 lxml
 requests
-beautifulsoup4
+beautifulsoup4>=4.5.3
