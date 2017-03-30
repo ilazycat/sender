@@ -365,7 +365,8 @@ class uestc():
         login_r = self.r.post(url=self.loginURL, data=post_data, headers=self.headers)
 
         result = login_r.text
-        AC = re.findall(u'href="http://eams.uestc.edu.cn/eams/"><b>教务系统', result)
+        print(result)
+        AC = re.findall('https://mail.std.uestc.edu.cn/"><br', result)
         if AC:
             res = self.get_eas()
             return json.dumps({'JSESSIONID': res})
