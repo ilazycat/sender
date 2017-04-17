@@ -88,6 +88,7 @@ def queryKuaidi(num):
     else:
         expressType, trackingNumber = num.split('/')
         ans['company'] = expressType
+        ans['num'] = trackingNumber
 
     getLogisticsURL  = ('http://www.kuaidi100.com/query?type=%s&postid=%s' % (expressType, trackingNumber))
     request = requests.get(getLogisticsURL, headers = headers)
