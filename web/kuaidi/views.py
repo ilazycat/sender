@@ -104,7 +104,8 @@ def queryKuaidi(num):
     except:
         if result['status'] == "400":
             ans['verify'] = -2
-        ans['verify'] = 0   # find company, no data
+        else:
+            ans['verify'] = 0   # find company, no data
     return ans
 
 
