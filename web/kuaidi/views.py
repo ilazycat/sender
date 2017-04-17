@@ -45,7 +45,7 @@ def Kuaidi(request):
                 elif (kuaidi['verify'] == 0):
                     # NO DATA
                     adder = kuaidiInfo.objects.create(belongs_id = belongs_id, num = kuaidi['num'], company = kuaidi['company'], comment = comment)
-                    message = 'Num exists, nut no data'
+                    message = 'No data or invalid custom company.'
                 else:
                     for one in kuaidi['data']:#TODO sql
                             adder = kuaidiInfo.objects.create(belongs_id = belongs_id, num = kuaidi['num'], company = kuaidi['company'], updateTime = kuaidi['updateTime'], time = one['time'], context = one['context'], comment = comment)
@@ -87,6 +87,7 @@ def queryKuaidi(num):
             return ans
     else:
         expressType, trackingNumber = num.split('/')
+        ans['company'] = expressType
 
     getLogisticsURL  = ('http://www.kuaidi100.com/query?type=%s&postid=%s' % (expressType, trackingNumber))
     request = requests.get(getLogisticsURL, headers = headers)
