@@ -65,25 +65,29 @@ def Kuaidi(request):
 def queryKuaidi(num):
     import requests
     ans = {}
-    trackingNumber = num
-    ans['num'] = trackingNumber
     headers = {
-        'Accept' : 'application/json, text/plain, */*',
-        'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36',
-        'Accept-Encoding' : 'gzip, deflate, sdch',
-        'Accept-Language' : 'en-US,en;q=0.8',
-        'Referer' : 'http://www.kuaidi100.com/',
+        'Accept': 'application/json, text/plain, */*',
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36',
+        'Accept-Encoding': 'gzip, deflate, sdch',
+        'Accept-Language': 'en-US,en;q=0.8',
+        'Referer': 'http://www.kuaidi100.com/',
     }
-    getExpressURL = ('http://www.kuaidi100.com/autonumber/autoComNum?text=%s' % trackingNumber)
-    request = requests.get(getExpressURL, headers = headers)
-    result = eval(str(request.text))
-    try:
-        expressType = result['auto'][0]['comCode']
-        ans['company'] = expressType
-    except:
-        ans['verify'] = -1
-        ans['message'] = 'bad input, can not find company or no this code'
-        return ans
+    if '/' not in num:
+        trackingNumber = num
+        ans['num'] = trackingNumber
+        getExpressURL = ('http://www.kuaidi100.com/autonumber/autoComNum?text=%s' % trackingNumber)
+        request = requests.get(getExpressURL, headers = headers)
+        result = eval(str(request.text))
+        try:
+            expressType = result['auto'][0]['comCode']
+            ans['company'] = expressType
+        except:
+            ans['verify'] = -1
+            ans['message'] = 'bad input, can not find company or no this code'
+            return ans
+    else:
+        expressType, trackingNumber = num.split('/')
+
     getLogisticsURL  = ('http://www.kuaidi100.com/query?type=%s&postid=%s' % (expressType, trackingNumber))
     request = requests.get(getLogisticsURL, headers = headers)
     result = json.loads(request.text)
