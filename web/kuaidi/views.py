@@ -47,6 +47,7 @@ def Kuaidi(request):
                     adder = kuaidiInfo.objects.create(belongs_id = belongs_id, num = kuaidi['num'], company = kuaidi['company'], comment = comment)
                     message = 'No data at this time'
                 elif (kuaidi['verify'] == -2):
+                    message = 'Invalid company'
                 else:
                     for one in kuaidi['data']:#TODO sql
                             adder = kuaidiInfo.objects.create(belongs_id = belongs_id, num = kuaidi['num'], company = kuaidi['company'], updateTime = kuaidi['updateTime'], time = one['time'], context = one['context'], comment = comment)
@@ -101,6 +102,7 @@ def queryKuaidi(num):
 
         ans['verify'] = 1
     except:
+        if result['status'] == "400":
             ans['verify'] = -2
         ans['verify'] = 0   # find company, no data
     return ans
