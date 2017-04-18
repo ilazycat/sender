@@ -49,16 +49,21 @@ class API:
             'Accept-Language' : 'en-US,en;q=0.8',
             'Referer' : 'http://www.kuaidi100.com/',
         }
-        getExpressURL = ('http://www.kuaidi100.com/autonumber/autoComNum?text=%s' % trackingNumber)
-        request = requests.get(getExpressURL)
-        result = json.loads(request.text)
-        try:
-            expressType = result['auto'][0]['comCode']
-            ans['company'] = expressType
-        except:
-            ans['verify'] = -1
-            ans['message'] = 'bad input, can not find company or no this code'
-            return ans
+        # getExpressURL = ('http://www.kuaidi100.com/autonumber/autoComNum?text=%s' % trackingNumber)
+        # request = requests.get(getExpressURL)
+        # result = json.loads(request.text)
+        # try:
+        #     expressType = result['auto'][0]['comCode']
+        #     ans['company'] = expressType
+        # except:
+        #     ans['verify'] = -1
+        #     ans['message'] = 'bad input, can not find company or no this code'
+        #     return ans
+        sql = ("select distinct company from %s where num='%s';" % (self.table, num))
+        self.cu.execute(sql)
+        response = self.cu.fetchone()
+        expressType = response[0]
+        ans['company'] = expressType
         getLogisticsURL  = ('http://www.kuaidi100.com/query?type=%s&postid=%s' % (expressType, trackingNumber))
         request = requests.get(getLogisticsURL)
         result = json.loads(request.text)
